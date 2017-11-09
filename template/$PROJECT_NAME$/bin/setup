@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+#
+# Setup Script
+#
+# Runs all the needed commands to set up a developer's system to run this app.
+# This script should be run on your continuous integration server.
+#
+# Customize this as your app grows.
+
+# Ensure Elixir is installed
+command -v elixir >/dev/null 2>&1 || {
+  echo "This app requires Elixir, but it was not found on your system."
+  echo "Install it using the instructions at http://elixir-lang.org"
+  exit 1
+}
+
+echo "----------------------------------------------------------"
+echo "Ensuring Hex is installed..."
+echo "----------------------------------------------------------"
+mix local.hex --force
+mix local.rebar --force
+echo "Done!"
+
+echo "----------------------------------------------------------"
+echo "Installing Mix dependencies..."
+echo "----------------------------------------------------------"
+
+mix deps.get || { echo "Mix dependencies could not be installed!"; exit 1; }
+
+echo "----------------------------------------------------------"
+echo "Running tests to verify setup is complete..."
+echo "----------------------------------------------------------"
+bin/test || { exit 1; }
+
+echo "----------------------------------------------------------"
+echo "Setup complete!"
+echo "----------------------------------------------------------"

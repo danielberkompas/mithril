@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#
+# Update Script
+#
+# Pulls down from the git repository and runs all commands needed to update
+# the local development app.
+
+git pull || { echo 'Could not pull from origin.'; exit 1; }
+mix deps.get || { echo 'Could not update dependencies.'; exit 1; }
+mix compile || { echo 'Could not compile app.'; exit 1; }
+
+echo "Update complete!"

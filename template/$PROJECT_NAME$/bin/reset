@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# Reset Script
+#
+# Resets a development environment by deleting all build artifacts, dropping
+# any databases, and rerunning `bin/setup`.
+
+# Clear the _build directory
+rm -rf _build/
+
+# Clear the deps
+rm -rf deps/
+
+# Rerun bin/setup
+bin/setup || { exit 1; }
