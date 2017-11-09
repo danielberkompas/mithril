@@ -1,0 +1,31 @@
+<% MixTemplates.ignore_file_unless(assigns[:html] == "slim") %>
+doctype html
+html
+  head
+    meta charset="utf-8"
+    meta content="IE=edge" http-equiv="X-UA-Compatible"
+    meta content="width=device-width, initial-scale=1" name="viewport"
+
+    title <%= @project_name_camel_case %>
+
+<%= if assigns[:assets] do %>
+    link rel="stylesheet" href="#{Routes.static_url(@conn, "/css/app.css")}"
+<% end %>
+
+  body
+<%= if assigns[:accounts] do %>
+    nav
+      ul
+        = if assigns[:token] do
+          li= link "My Account", to: Routes.registration_path(@conn, :edit)
+          li= link "Log Out", to: Routes.session_path(@conn, :delete)
+        - else
+          li= link "Log In", to: Routes.session_path(@conn, :new)
+          li= link "Sign Up", to: Routes.registration_path(@conn, :new)
+<% end %>
+    main role="main"
+      = render @view_module, @view_template, assigns
+
+<%= if assigns[:assets] do %>
+  script src="#{Routes.static_url(@conn, "/js/app.js")}"
+<% end %>

@@ -26,13 +26,11 @@ defmodule <%= @project_name_camel_case %>Web.ConnCase do
     end
   end
 
-
-  setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(<%= @project_name_camel_case %>.Repo)
+  setup <%= if assigns[:ecto] == "postgres" do %>tags<% else %>_tags<% end %> do
+    <%= if assigns[:ecto] == "postgres" do %>:ok = Ecto.Adapters.SQL.Sandbox.checkout(<%= @project_name_camel_case %>.Repo)
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(<%= @project_name_camel_case %>.Repo, {:shared, self()})
     end
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    <% end %>{:ok, conn: Phoenix.ConnTest.build_conn()}
   end
-
 end

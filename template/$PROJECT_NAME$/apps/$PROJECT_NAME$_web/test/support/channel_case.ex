@@ -1,3 +1,4 @@
+<%= MixTemplates.ignore_file_unless(assigns[:websockets] != nil) %>
 defmodule <%= @project_name_camel_case %>Web.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
@@ -25,7 +26,7 @@ defmodule <%= @project_name_camel_case %>Web.ChannelCase do
     end
   end
 
-
+  <%= if assigns[:ecto] == "postgres" do %>
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(<%= @project_name_camel_case %>.Repo)
     unless tags[:async] do
@@ -33,5 +34,5 @@ defmodule <%= @project_name_camel_case %>Web.ChannelCase do
     end
     :ok
   end
-
+  <% end %>
 end

@@ -9,3 +9,13 @@ $ mix archive.install hex mix_generator
 $ mix archive.install hex mix_templates
 $ mix template.install github infinitered/mithril
 ```
+
+## Options
+
+### Base
+
+The base configuration is _extremely_ minimalistic.
+
+```sh
+$ mix gen mithril my_app
+```

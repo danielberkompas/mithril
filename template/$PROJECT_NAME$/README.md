@@ -1,7 +1,6 @@
 # <%= @project_name_camel_case %>
 
-The Elixir backend for <%= @project_name_camel_case %>, based on 
-[<%= @project_name_camel_case %>](https://github.com/infinitered/<%= @project_name %>).
+The Elixir backend for <%= @project_name_camel_case %>.
 
 ## Scripts
 
@@ -36,9 +35,12 @@ The Elixir backend for <%= @project_name_camel_case %>, based on
 
 ## Architecture
 
-<%= @project_name_camel_case %> uses the <%= @project_name_camel_case %> code organization conventions.
+<%= @project_name_camel_case %> uses the Mithril code organization conventions.
 
 - `apps/<%= @project_name %>` contains the business logic for the application.
   See its README and docs for details on its public API.
+<%= if assigns[:api] == "graphql" do %>- `apps/<%= @project_name %>_api` provides a GraphQL API.<% end %>
+- `apps/<%= @project_name %>_web` contains a simple Phoenix application, which
+  wraps the business logic from `apps/<%= @project_name %>`.
 
 TODO: describe other apps

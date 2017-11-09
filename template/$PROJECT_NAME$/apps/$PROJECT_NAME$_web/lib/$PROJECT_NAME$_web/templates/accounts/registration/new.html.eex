@@ -1,0 +1,4 @@
+<% MixTemplates.ignore_file_unless(assigns[:html] == "eex") %>
+<h1>Sign Up</h1>
+
+<%%= render "_form.html", Map.merge(assigns, %{action: Routes.registration_path(@conn, :create)}) %>

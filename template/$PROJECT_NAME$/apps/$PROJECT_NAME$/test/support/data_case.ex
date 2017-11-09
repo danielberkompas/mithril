@@ -1,4 +1,4 @@
-<%= MixTemplates.ignore_file_unless(assigns[:ecto]) %>
+<%= MixTemplates.ignore_file_unless(assigns[:ecto] != nil) %>
 defmodule <%= @project_name_camel_case %>.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
@@ -23,6 +23,8 @@ defmodule <%= @project_name_camel_case %>.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import <%= @project_name_camel_case %>.DataCase
+      
+      alias <%= @project_name_camel_case %>.Factory
     end
   end
 

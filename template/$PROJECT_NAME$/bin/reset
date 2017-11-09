@@ -11,5 +11,13 @@ rm -rf _build/
 # Clear the deps
 rm -rf deps/
 
+<%= if assigns[:ecto] do %>
+# Drop the database
+cd apps/<%= @project_name %>/ && {
+  mix ecto.drop
+  cd -;
+}
+<% end %>
+
 # Rerun bin/setup
 bin/setup || { exit 1; }

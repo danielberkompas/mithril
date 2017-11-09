@@ -1,0 +1,11 @@
+<% MixTemplates.ignore_file_unless(assigns[:html] == "eex") %>
+<h1>Forgot Password</h1>
+
+<p>Enter your email address below to receive instructions on how to reset your password.</p>
+
+<%%= form_tag Routes.forgot_password_path(@conn, :create), method: :post do %>
+  <%%= label :user, :email %>
+  <%%= email_input :user, :email %>
+
+  <%%= submit "Send Instructions" %>
+<%% end %>

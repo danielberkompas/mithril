@@ -14,6 +14,15 @@ command -v elixir >/dev/null 2>&1 || {
   exit 1
 }
 
+<%= if assigns[:assets] do %>
+# Ensure Node.js is installed
+command -v npm >/dev/null 2>&1 || {
+  echo "This app requires Node.js to build assets, but it was not found on your system."
+  echo "Install it using the instructions at http://nodejs.org"
+  exit 1
+}
+<% end %>
+
 echo "----------------------------------------------------------"
 echo "Ensuring Hex is installed..."
 echo "----------------------------------------------------------"
@@ -26,6 +35,32 @@ echo "Installing Mix dependencies..."
 echo "----------------------------------------------------------"
 
 mix deps.get || { echo "Mix dependencies could not be installed!"; exit 1; }
+MIX_ENV=test mix deps.compile || { echo "Dependencies could not compile for test environment!"; exit 1; }
+MIX_ENV=dev mix deps.compile || { echo "Dependencies could not compile for dev environment!"; exit 1; }
+
+<%= if assigns[:assets] do %>
+echo "----------------------------------------------------------"
+echo "Installing Node.js dependencies (for assets)"
+echo "----------------------------------------------------------"
+
+cd apps/<%= @project_name %>_web/assets/ && {
+  npm install || { echo "Node dependencies could not be installed!"; exit 1; };
+  cd -;
+}
+<% end %>
+
+<%= if assigns[:ecto] do %>
+if [ ! $CI ]; then
+  echo "----------------------------------------------------------"
+  echo "Setting up database..."
+  echo "----------------------------------------------------------"
+
+  cd apps/<%= @project_name %>/ && {
+    mix ecto.setup || { echo "Database could not be set up!"; exit 1; }
+    cd -;
+  }
+fi
+<% end %>
 
 echo "----------------------------------------------------------"
 echo "Running tests to verify setup is complete..."

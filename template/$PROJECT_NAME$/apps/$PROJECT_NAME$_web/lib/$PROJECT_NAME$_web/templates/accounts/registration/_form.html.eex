@@ -1,0 +1,16 @@
+<% MixTemplates.ignore_file_unless(assigns[:html] == "eex") %>
+<%%= form_for @changeset, @action, fn f -> %>
+  <%%= label f, :email %>
+  <%%= email_input f, :email %>
+  <%%= error_tag f, :email %>
+
+  <%%= label f, :password %>
+  <%%= password_input f, :password %>
+  <%%= error_tag f, :password %>
+
+  <%%= label f, :password_confirmation %>
+  <%%= password_input f, :password_confirmation %>
+  <%%= error_tag f, :password_confirmation %>
+
+  <%%= submit "Submit" %>
+<%% end %>

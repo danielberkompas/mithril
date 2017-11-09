@@ -11,7 +11,9 @@ config :<%= @project_name %>_web, <%= @project_name_camel_case %>Web.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: []
+  watchers: [<%= if assigns[:assets] do %>
+    npm: ["run", "watch", cd: Path.expand("../assets", __DIR__)]
+  <% end %>]
 
 # ## SSL Support
 #
@@ -29,15 +31,15 @@ config :<%= @project_name %>_web, <%= @project_name_camel_case %>Web.Endpoint,
 # configured to run both http and https servers on
 # different ports.
 
-# Watch static and templates for browser reloading.
+<%= if assigns[:assets] || assigns[:html] || assigns[:gettext] do %>
+# Watch files for browser reloading.
 config :<%= @project_name %>_web, <%= @project_name_camel_case %>Web.Endpoint,
   live_reload: [
-    patterns: [
-      ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
-      ~r{priv/gettext/.*(po)$},
+    patterns: [<%= if assigns[:assets] do %>
+      ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},<% end %><%= if assigns[:gettext] do %>
+      ~r{priv/gettext/.*(po)$}<% end %><%= if assigns[:html] && assigns[:gettext] do %>,<% end %><%= if assigns[:html] do %>
       ~r{lib/<%= @project_name %>_web/views/.*(ex)$},
-      ~r{lib/<%= @project_name %>_web/templates/.*(eex)$}
+      ~r{lib/<%= @project_name %>_web/templates/.*(eex<%= if @html == "slim" do %>|slim<% end %>)$}<% end %>
     ]
   ]
-
-
+<% end %>

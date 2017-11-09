@@ -1,0 +1,2 @@
+<% MixTemplates.ignore_file_and_directory_unless(assigns[:accounts] != nil) %>
+<% MixTemplates.ignore_file_unless(false) %>

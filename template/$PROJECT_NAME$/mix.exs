@@ -5,7 +5,14 @@ defmodule <%= @project_name_camel_case %>.Umbrella.Mixfile do
     [
       apps_path: "apps",
       start_permanent: Mix.env == :prod,
-      deps: deps()
+      deps: deps(),
+      docs: docs()
+    ]
+  end
+
+  defp docs do
+    [
+      main: <%= @project_name_camel_case %>
     ]
   end
 

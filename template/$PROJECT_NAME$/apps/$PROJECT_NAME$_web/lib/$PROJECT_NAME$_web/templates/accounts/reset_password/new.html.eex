@@ -1,0 +1,14 @@
+<% MixTemplates.ignore_file_unless(assigns[:html] == "eex") %>
+<h1>Reset Your Password</h1>
+
+<%%= form_for @changeset, Routes.reset_password_path(@conn, :create, token: @conn.params["token"]), [method: :post], fn f -> %>
+  <%%= label f, :password %>
+  <%%= password_input f, :password %>
+  <%%= error_tag f, :password %>
+
+  <%%= label f, :password_confirmation %>
+  <%%= password_input f, :password_confirmation %>
+  <%%= error_tag f, :password_confirmation %>
+
+  <%%= submit "Change My Password" %>
+<%% end %>

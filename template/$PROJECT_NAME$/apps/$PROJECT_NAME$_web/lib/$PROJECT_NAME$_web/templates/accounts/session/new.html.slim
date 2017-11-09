@@ -1,0 +1,11 @@
+<% MixTemplates.ignore_file_unless(assigns[:html] == "slim") %>
+h1 Log In
+
+= form_tag Routes.session_path(@conn, :create), method: :post do
+  = label :user, :email
+  = email_input :user, :email
+
+  = label :user, :password
+  = password_input :user, :password
+
+  = submit "Log In"

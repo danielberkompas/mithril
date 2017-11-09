@@ -1,3 +1,4 @@
+<% MixTemplates.ignore_file_and_directory_unless(assigns[:gettext] != nil) %>
 ## This file is a PO Template file.
 ##
 ## `msgid`s here are often extracted from source code.
@@ -7,6 +8,7 @@
 ## Run `mix gettext.extract` to bring this file up to
 ## date. Leave `msgstr`s empty as changing them here as no
 ## effect: edit them in PO (`.po`) files instead.
+<%= if assigns[:ecto] do %>
 
 ## From Ecto.Changeset.cast/4
 msgid "can't be blank"
@@ -93,3 +95,4 @@ msgstr ""
 
 msgid "must be equal to %{number}"
 msgstr ""
+<% end %>
