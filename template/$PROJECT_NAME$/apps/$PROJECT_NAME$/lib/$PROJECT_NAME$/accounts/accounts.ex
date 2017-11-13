@@ -71,7 +71,7 @@ defmodule <%= @project_name_camel_case %>.Accounts do
   @spec change_user(user_token | User.t) :: 
     {:ok, Ecto.Changeset.t} |
     {:error, :invalid_token}
-  def change_user(token \\ nil)
+  def change_user(token_or_user \\ nil)
   def change_user(nil) do
     {:ok, User.insert_changeset(%User{})}
   end

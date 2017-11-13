@@ -1,6 +1,6 @@
 defmodule <%= @project_name_camel_case %>API.Middleware.HandleErrors do
   @moduledoc """
-  Absinthe middleware which handles error tuples from resolver functions.
+  `Absinthe.Middleware` which handles error tuples from resolver functions.
 
   This allows resolver functions to be much simpler, because they do not
   have to handle their own errors. This is very similar to `action_fallback`

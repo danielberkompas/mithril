@@ -1,11 +1,12 @@
 <% MixTemplates.ignore_file_and_directory_unless(assigns[:email] != nil) %>
 defmodule <%= @project_name_camel_case %>.Notifications do
   @moduledoc """
-  Domain responsible for sending notifications.
+  Sends notifications for `<%= @project_name_camel_case %>`.
   """
 
   alias <%= @project_name_camel_case %>.Mailer
   alias <%= @project_name_camel_case %>.Notifications.Email
+  alias <%= @project_name_camel_case %>.Notifications.Email.Mailer
 
   <%= if assigns[:accounts] do %>
   @doc """

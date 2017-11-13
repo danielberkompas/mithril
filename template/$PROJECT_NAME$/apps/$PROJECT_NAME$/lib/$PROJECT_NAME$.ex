@@ -5,12 +5,13 @@ defmodule <%= @project_name_camel_case %> do
 
   ## Domains
 
-  `<%= @project_name_camel_case %>` is divided into domains, which can be thought
+  `<%= @project_name_camel_case %>` is divided into **domains**, which can be thought
   of as features or groups of closely related features.
 
   - Each domain defines a single module with a public API.
 
-  - All other modules within the domain are private and must never be called from outside the domain.
+  - All other modules within the domain are private and must never be called from 
+    outside the domain.
 
   - Each domain manages its own persistence.
 
