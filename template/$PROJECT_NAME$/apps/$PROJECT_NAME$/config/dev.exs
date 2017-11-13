@@ -13,7 +13,7 @@ config :<%= @project_name %>, <%= @project_name_camel_case %>.Repo,
 
 <%= if assigns[:email] do %>
 # Configure mailer for local previews
-config :<%= @project_name %>, <%= @project_name_camel_case %>.Mailer,
+config :<%= @project_name %>, <%= @project_name_camel_case %>.Notifications.Email.Mailer,
   adapter: Swoosh.Adapters.Local
 <% end %>
 

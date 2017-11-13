@@ -11,7 +11,9 @@
   <% end %>},
   "dependencies": {
     "phoenix": "file:../../../deps/phoenix",
+    <%= if assigns[:html] do %>
     "phoenix_html": "file:../../../deps/phoenix_html"
+    <% end %>
   },
   "devDependencies": {<%= if assigns[:asset_bundler] == "brunch" do %>
     "babel-brunch": "^6.1.1",

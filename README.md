@@ -25,5 +25,5 @@ $ mix gen mithril my_app
 This will generate an app with a kitchen sink of features, including account support and a GraphQL API:
 
 ```sh
-$ mix gen mithril my_app --ecto postgres --email --accounts --assets --asset-bundler webpack --api graphql
+$ mix gen mithril my_app --ecto postgres --email --accounts --assets --asset-bundler webpack --api graphql --html slim
 ```

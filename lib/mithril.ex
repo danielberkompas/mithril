@@ -1,7 +1,6 @@
 defmodule Mithril do
-
   @moduledoc File.read!(Path.join([__DIR__, "../README.md"]))
-  
+
   use MixTemplates,
     name: :mithril,
     short_desc: "Template for Elixir umbrella app with convenient scripts.",
@@ -9,13 +8,14 @@ defmodule Mithril do
     options: [
       # Whether to generate basic email/password login functionality.
       accounts: [],
-      
+
       # Whether to generate an API app for the project, and what type.
       # Supports "graphql"
-      api: [takes: "type"], # "graphql"
+      # "graphql"
+      api: [takes: "type"],
 
       # Boolean, whether Phoenix should serve assets
-      assets: [], 
+      assets: [],
 
       # What asset bundler to use if Phoenix the --assets option is true
       asset_bundler: [takes: "webpack or brunch", default: "webpack"],
@@ -54,4 +54,11 @@ defmodule Mithril do
       # Boolean: Whether this project will serve anything over websockets.
       websockets: []
     ]
+
+  def clean_up(context) do
+    if context[:elixir_version] =~ "1.6" do
+      IO.puts("Running code formatter...")
+      System.cmd("mix", ["format"], cd: context[:target_subdir])
+    end
+  end
 end

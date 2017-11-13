@@ -35,8 +35,8 @@ echo "Installing Mix dependencies..."
 echo "----------------------------------------------------------"
 
 mix deps.get || { echo "Mix dependencies could not be installed!"; exit 1; }
-MIX_ENV=test mix deps.compile || { echo "Dependencies could not compile for test environment!"; exit 1; }
-MIX_ENV=dev mix deps.compile || { echo "Dependencies could not compile for dev environment!"; exit 1; }
+MIX_ENV=test mix deps.compile --warnings-as-errors || { echo "Dependencies could not compile for test environment!"; exit 1; }
+MIX_ENV=dev mix deps.compile --warnings-as-errors || { echo "Dependencies could not compile for dev environment!"; exit 1; }
 
 <%= if assigns[:assets] do %>
 echo "----------------------------------------------------------"
