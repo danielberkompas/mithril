@@ -1,16 +1,29 @@
 # Mithril Blueprint
 
-An architecture in a box for a backend server with an API. (Usually consumed by a mobile application.)
+An architecture in a box for a backend server. See the presentation in `presentation/` for more details.
 
 ## Installation
 
-```bash
+Mithril works best with a pre-release version of Elixir: `1.6.0-dev`.
+
+You can install it using [kiex](https://github.com/taylor/kiex) like so:
+
+```sh
+$ kiex install master # Install Elixir 1.6.0 from Elixir's master branch
+$ kiex default master # use Elixir 1.6 by default on command line
+$ kiex use master     # use Elixir 1.6 in this terminal session
+$ mix local.hex --force # Install hex, the package manager
+```
+
+You can then install Mithril:
+
+```sh
 $ mix archive.install hex mix_generator
 $ mix archive.install hex mix_templates
 $ mix template.install github infinitered/mithril
 ```
 
-## Options
+## Usage
 
 ### Base
 
@@ -27,3 +40,7 @@ This will generate an app with a kitchen sink of features, including account sup
 ```sh
 $ mix gen mithril my_app --ecto postgres --email --accounts --assets --asset-bundler webpack --api graphql --html slim
 ```
+
+## TODO
+
+- [ ] Tests on the generator itself
