@@ -31,6 +31,8 @@ The base configuration is _extremely_ minimalistic.
 
 ```sh
 $ mix gen mithril my_app
+$ cd my_app/
+$ bin/setup
 ```
 
 ### Kitchen Sink
@@ -39,6 +41,8 @@ This will generate an app with a kitchen sink of features, including account sup
 
 ```sh
 $ mix gen mithril my_app --ecto postgres --email --accounts --assets --asset-bundler webpack --api graphql --html slim
+$ cd my_app/
+$ bin/setup
 ```
 
 ## TODO
