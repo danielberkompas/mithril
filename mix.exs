@@ -17,7 +17,7 @@ defmodule Mithril.Mixfile do
     [
       app: @name,
       version: @version,
-      deps: @deps,
+      deps: deps(),
       elixir: "~> 1.4",
       package: package(),
       description: @description,
