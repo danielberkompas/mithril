@@ -1,1 +1,3 @@
 .DS_Store
+/.elixir_ls
+/_build

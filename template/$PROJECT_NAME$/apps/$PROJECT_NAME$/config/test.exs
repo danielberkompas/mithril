@@ -1,13 +1,28 @@
 use Mix.Config
+
 <%= if assigns[:ecto] == "postgres" do %>
-# Configure your database
+# Configure database for test mode
+<%= if assigns[:ci] == "semaphore" do %>
+{whoami, _} = System.cmd("whoami", [])
+whoami = String.replace(whoami, "\n", "")
+
+config :<%= @project_name %>, <%= @project_name_camel_case %>.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  database: "<%= @project_name %>_test",
+  username: System.get_env("DATABASE_POSTGRESQL_USERNAME") || whoami,
+  password: System.get_env("DATABASE_POSTGRESQL_PASSWORD") || nil,
+  hostname: "localhost",
+  pool: Ecto.Adapters.SQL.Sandbox,
+  ownership_timeout: 60_000
+<% else %>
 config :<%= @project_name %>, <%= @project_name_camel_case %>.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
   password: "postgres",
   database: "<%= @project_name %>_test",
   hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
+  pool_size: 10
+<% end %>
 <% end %>
 
 <%= if assigns[:email] do %>
