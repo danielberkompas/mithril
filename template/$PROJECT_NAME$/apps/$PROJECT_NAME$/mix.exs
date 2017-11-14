@@ -48,7 +48,7 @@ defmodule <%= @project_name_camel_case %>.Mixfile do
       {:ecto, "~> 2.2"}<% end %><%= if assigns[:email] do %>,
       {:swoosh, "~> 0.11.0"}<% end %><%= if assigns[:accounts] do %>,
       {:comeonin, "~> 4.0.0"},
-      {:bcrypt_elixir, "~> 1.0.4"}
+      {:bcrypt_elixir, "~> 0.12"}
     <% end %>]
   end
 

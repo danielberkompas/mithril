@@ -33,7 +33,7 @@ defmodule <%= @project_name_camel_case %>.Notifications.Email.Template do
     # A template which looks like this:
     #
     #   # templates/template_name.html.eex
-    #   <p>Hello <%= @name %></p>
+    #   <p>Hello <%%= @name %></p>
     #
     # Will compile to this function definition:
     #

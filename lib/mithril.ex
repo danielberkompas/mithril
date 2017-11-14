@@ -20,6 +20,9 @@ defmodule Mithril do
       # What asset bundler to use if Phoenix the --assets option is true
       asset_bundler: [takes: "webpack or brunch", default: "webpack"],
 
+      # Tweaks configuration for a particular continuous integration provider
+      ci: [takes: "semaphore"],
+
       # How are you going to deploy the app?
       # Takes "heroku"
       # deploy: [takes: "host"],
