@@ -37,6 +37,8 @@ defmodule <%= @project_name_camel_case %>.Accounts do
      ```elixir
      <%= @project_name_camel_case %>.Secret.super_secret_function(...args, token)
      ```
+
+  See the function documentation below for more details.
   """
 
   @type user_token :: String.t

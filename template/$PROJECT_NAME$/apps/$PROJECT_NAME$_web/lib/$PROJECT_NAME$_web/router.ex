@@ -1,4 +1,6 @@
 defmodule <%= @project_name_camel_case %>Web.Router do
+  @moduledoc "The `Phoenix.Router` for `<%= @project_name_camel_case %>Web`"
+
   use <%= @project_name_camel_case %>Web, :router
   <%= if assigns[:accounts] && assigns[:html] do %>
 

@@ -30,7 +30,7 @@ defmodule <%= @project_name_camel_case %>.Mixfile do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(:dev),  do: ["lib", "test/support"]
+  defp elixirc_paths(:dev),  do: ["lib", "test/support/factory.ex"]
   defp elixirc_paths(_),     do: ["lib"]
 
   defp docs do

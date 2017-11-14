@@ -2,6 +2,10 @@
 
 The Elixir backend for <%= @project_name_camel_case %>.
 
+## About <%= @project_name_camel_case %>
+
+TODO: Briefly describe what <%= @project_name_camel_case %> does
+
 ## Scripts
 
 <dl>

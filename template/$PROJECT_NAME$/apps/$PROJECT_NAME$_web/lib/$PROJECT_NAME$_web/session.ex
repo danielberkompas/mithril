@@ -1,7 +1,7 @@
 <% MixTemplates.ignore_file_unless(assigns[:accounts] != nil && assigns[:html] != nil) %>
 defmodule <%= @project_name_camel_case %>Web.Session do
   @moduledoc """
-  Helper and plug to support storing `<%= @project_name_camel_case %>.Accounts` tokens in the session.
+  Helper module and plug to support storing `<%= @project_name_camel_case %>.Accounts` tokens in the session.
   """
 
   import Plug.Conn, only: [

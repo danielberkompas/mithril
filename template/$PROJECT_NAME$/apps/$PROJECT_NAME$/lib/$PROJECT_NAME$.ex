@@ -3,6 +3,10 @@ defmodule <%= @project_name_camel_case %> do
   The core Elixir application for `<%= @project_name_camel_case %>`, containing all the business logic 
   and persistence.
 
+  ## About <%= @project_name_camel_case %>
+
+  TODO: briefly describe the purpose of <%= @project_name_camel_case %> here
+
   ## Domains
 
   `<%= @project_name_camel_case %>` is divided into **domains**, which can be thought
@@ -34,12 +38,11 @@ defmodule <%= @project_name_camel_case %> do
 
   The `<%= @project_name_camel_case %>` platform also contains supporting applications.
 
-  - `apps/<%= @project_name %>_web` (`<%= @project_name_camel_case %>Web`): A lightweight
+  - `<%= @project_name_camel_case %>Web`: A lightweight
     Phoenix application which handles HTTP and Websocket requests.
   <%= if assigns[:api] == "graphql" do %>
 
-  - `apps/<%= @project_name %>_api` (`<%= @project_name_camel_case %>API`): Provides a GraphQL API,
-    which is mounted inside the `<%= @project_name %>_web` app's router.
+  - `<%= @project_name_camel_case %>API`: Provides a GraphQL API, which is mounted inside the `<%= @project_name %>_web` app's router.
   <% end %>
   """
 end

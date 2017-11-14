@@ -1,4 +1,8 @@
 defmodule <%= @project_name_camel_case %>Web.Endpoint do
+  @moduledoc """
+  The `Phoenix.Endpoint` for `<%= @project_name_camel_case %>Web`.
+  """
+
   use Phoenix.Endpoint, otp_app: :<%= @project_name %>_web
 
   <%= if assigns[:websockets] do %>

@@ -1,7 +1,14 @@
 <% MixTemplates.ignore_file_unless(assigns[:ecto] != nil) %>
 defmodule <%= @project_name_camel_case %>.Factory do
   @moduledoc """
-  Build and insert test data.
+  Build and insert test data, _bypassing_ the public APIs of domains.
+
+  USE WITH CAUTION. It is often better to call the domain functions directly
+  to set up test data, because it exercises your domains and ensures they are
+  actually usable from the outside world.
+
+  Still, there is a place for inserting data directly, for example, when the
+  function you are testing requires a lot of data to set up.
 
   ## Examples
 

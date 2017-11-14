@@ -1,4 +1,6 @@
 defmodule <%= @project_name_camel_case %>Web.ErrorView do
+  @moduledoc false
+
   use <%= @project_name_camel_case %>Web, :view
 
   # If you want to customize a particular status code

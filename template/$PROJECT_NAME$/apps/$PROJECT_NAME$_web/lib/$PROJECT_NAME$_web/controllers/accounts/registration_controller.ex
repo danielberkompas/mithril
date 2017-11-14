@@ -1,4 +1,6 @@
 defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationController do
+  @moduledoc false
+
   use <%= @project_name_camel_case %>Web, :controller
 
   alias <%= @project_name_camel_case %>.Accounts
