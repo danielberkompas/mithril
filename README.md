@@ -20,7 +20,8 @@ You can then install Mithril:
 ```sh
 $ mix archive.install hex mix_generator
 $ mix archive.install hex mix_templates
-$ mix template.install github infinitered/mithril
+$ git clone git@github.com:infinitered/mithril.git
+$ mix template.install mithril
 ```
 
 ## Usage
