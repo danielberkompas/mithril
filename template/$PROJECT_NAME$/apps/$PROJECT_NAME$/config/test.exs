@@ -17,10 +17,9 @@ config :<%= @project_name %>, <%= @project_name_camel_case %>.Repo,
 <% else %>
 config :<%= @project_name %>, <%= @project_name_camel_case %>.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
   database: "<%= @project_name %>_test",
   hostname: "localhost",
+  pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 <% end %>
 <% end %>
