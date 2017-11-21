@@ -46,7 +46,8 @@ defmodule <%= @project_name_camel_case %>.Mixfile do
     [<%= if assigns[:ecto] == "postgres" do %>
       {:postgrex, ">= 0.0.0"}<% end %><%= if assigns[:ecto] do %>,
       {:ecto, "~> 2.2"}<% end %><%= if assigns[:email] do %>,
-      {:swoosh, "~> 0.11.0"}<% end %><%= if assigns[:accounts] do %>,
+      {:swoosh, "~> 0.11.0"}<% end %><%= if assigns[:websockets] do %>,
+      {:mithril_pubsub, github: "infinitered/mithril_pubsub"}<% end %><%= if assigns[:accounts] do %>,
       {:comeonin, "~> 4.0.0"},
       {:bcrypt_elixir, "~> 0.12"}
     <% end %>]
