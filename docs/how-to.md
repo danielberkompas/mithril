@@ -56,7 +56,13 @@ defmodule MyApp.Issues.Callback do
   # much as possible to keep the subscribers lean.
   #
   # Avoid passing Ecto structs, if possible.
+  @doc """
+  You can document each callback, and you should. Describe when it will be
+  called and what the arguments represent.
+  """
   @callback issue_created(id, attrs) :: :ok | no_return
+
+  @doc "..."
   @callback issue_updated(id, attrs) :: :ok | no_return
 end
 ```

@@ -1,5 +1,7 @@
 # Conventions
 
+Mithril applications follow the following conventions.
+
 ## Project Structure
 
 Mithril applications are Elixir [Umbrella](https://elixir-lang.org/getting-started/mix-otp/dependencies-and-umbrella-apps.html#umbrella-projects)
