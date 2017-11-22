@@ -4,6 +4,10 @@ defmodule <%= @project_name_camel_case %>Web.Endpoint do
   """
 
   use Phoenix.Endpoint, otp_app: :<%= @project_name %>_web
+  <%= if assigns[:websockets] && assigns[:api] == "graphql" do %>
+  use Absinthe.Phoenix.Endpoint
+  <% end %>
+
 
   <%= if assigns[:websockets] do %>
   socket "/socket", <%= @project_name_camel_case %>Web.UserSocket

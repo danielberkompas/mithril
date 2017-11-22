@@ -39,7 +39,7 @@ defmodule <%= @project_name_camel_case %>API.Mixfile do
   defp deps do
     [
       {:<%= @project_name %>, in_umbrella: true},
-      {:absinthe_plug, "~> 1.3.0"},
+      {:absinthe_plug, "~> 1.4.0"},
       {:poison, "~> 3.1"}
     ]
   end

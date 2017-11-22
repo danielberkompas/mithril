@@ -10,6 +10,9 @@ defmodule <%= @project_name_camel_case %>Web.Application do
     children = [
       # Start the endpoint when the application starts
       supervisor(<%= @project_name_camel_case %>Web.Endpoint, []),
+      <%= if assigns[:websockets] && assigns[:api] == "graphql" do %>
+      supervisor(Absinthe.Subscription, [<%= @project_name_camel_case %>Web.Endpoint])
+      <% end %>
       # Start your own worker by calling: <%= @project_name_camel_case %>Web.Worker.start_link(arg1, arg2, arg3)
       # worker(<%= @project_name_camel_case %>Web.Worker, [arg1, arg2, arg3]),
     ]
