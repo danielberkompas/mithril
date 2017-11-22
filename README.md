@@ -45,7 +45,3 @@ $ mix gen mithril my_app --ecto postgres --email --accounts --assets --asset-bun
 $ cd my_app/
 $ bin/setup
 ```
-
-## TODO
-
-- [ ] Tests on the generator itself
