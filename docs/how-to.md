@@ -131,20 +131,20 @@ This approach to authorization has several benefits.
 
 ### FAQ
 
-1. **Why can't client apps pass `user_id`?**
+#### 1. **Why can't client apps pass `user_id`?**
 
   You might be tempted to store `user_id` in your Phoenix session, and pass this to domain
   functions instead of a token. This reduces the amount of code in your domain modules
   because you don't have to translate tokens into `user_id`s.
 
   **Why it's bad**: It makes your client Phoenix app control how long a user stays logged in, via the
-  time-to-live on the Phoenix session cookie)
+  time-to-live on the Phoenix session cookie.
     - The logic app can't expire or revoke the session, it must rely on the client
     - The logic app is no longer in control of an important business concern: session duration
     - The client app is telling the logic who is logged in, which means that the client
       can impersonate anyone.
 
-2. **Why can't we use Plug or Absinthe Middleware for authorization?**
+#### 2. **Why can't we use Plug or Absinthe Middleware for authorization?**
 
   It's tempting to use Plug or Absinthe Middleware to require certain permissions on
   actions, because it seems to DRY up your code.
@@ -170,7 +170,7 @@ This approach to authorization has several benefits.
   In contrast, when you follow the guidelines above, your permission logic will be
   explicit, well documented, decoupled from your client apps, and easily testable.
 
-3. **Doesn't this approach couple all my domains to my `Accounts` domain?**
+#### 3. **Doesn't this approach couple all my domains to my `Accounts` domain?**
 
   Yes, it does. Each domain which needs to enforce permissions relies on 
   `Accounts.get_user_by_token` to convert tokens into user ids. This coupling can be 
@@ -226,6 +226,63 @@ This approach to authorization has several benefits.
 
   In this approach, you only reference `Accounts` from your `Identity` protocol
   implementation, which makes it easier to change and creates less coupling.
+
+---
+
+## Dependent Domains
+
+Domains will inevitably depend on each other. By depending on other domains,
+each domain is able to focus on only the things it cares about, and reduce code
+duplication.
+
+However, there are some basic rules of thumb to keep in mind when making domains
+depend on one another.
+
+### 1. Keep the Dependency One-Way
+
+If Domain A relies on Domain B, Domain B must not also rely on Domain A.
+
+![One-way dependencies are good](_images/one_way_dependency.svg)
+
+![Two-way dependencies are bad](_images/two_way_dependency.svg)
+
+If two domains _must_ rely on each other, this is a hint that they should be 
+merged into a single domain. They obviously are tightly coupled together, and 
+therefore should be one entity.
+
+#### Examples
+
+- **GOOD**: `Accounts` calls the `Notifications` domain to send notifications to an 
+  email address, passing the email address as an argument.
+
+- **BAD**: `Accounts` calls the `Notifications` domain to send notifications to a
+  `user_id`. `Notifications` queries `Accounts` for the email address to use.
+
+### 2. Reduce Coupling When Possible
+
+Decoupled domains are easier to reuse in other projects or extract to libraries. 
+It's always a balancing act because decoupling domains always comes with a little
+more overhead and formality.
+
+There are several ways to reduce coupling between domains. 
+
+#### [Protocols](https://hexdocs.pm/elixir/Kernel.html#defprotocol/2)
+
+Instead of relying on a data type from another domain directly, your domain can expose a
+data protocol which is then _implemented_ for the foreign data type. Your domain's true 
+dependency is then _on the protocol_, not on the data format returned by another domain.
+
+See the [Authorization FAQ](/how-to?id=_3-doesn39t-this-approach-couple-all-my-domains-to-my-accounts-domain)
+for an example.
+
+#### [Behaviours](https://hexdocs.pm/elixir/behaviours.html)
+
+A domain that relies on other domains to perform actions can define a `Behaviour` instead
+of calling those domains directly. See [the Callback Pattern](/how-to?id=callback-pattern) 
+for an example.
+
+The domain is really then relying _on the behaviour_, not other domains. The behaviour just
+happens to be implemented in such a way as to call other domains.
 
 ---
 
@@ -366,3 +423,5 @@ This approach has many benefits:
 - `Issues` provides an _explicit contract_ for subscribers in `Issues.Callback`.
   If the contract changes, the compiler will throw warnings about subscribers
   that don't adhere to the new contract.
+
+---
