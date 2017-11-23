@@ -53,25 +53,78 @@ of its arguments.
 MyApp.CMS.create_page(token, params)
 ```
 
-It's easy to do this with a simple extra function head for `create_page/2`:
+There are two ways to do this.
+
+#### 1. Function
+
+Add a private `identify_user` function to your domain:
 
 ```elixir
-# Extra function head translates token into a user_id by calling into
-# the `Accounts` domain. If this fails, the function will return whatever
-# error `Accounts.get_user_by_token/1` returned.
-def create_page(token, params) when is_binary(token) do
-  with {:ok, %{id: user_id}} = Accounts.get_user_by_token(token) do
-    create_page(user_id, params)
+# When given a binary, assume it is a token and pass it along to
+# Accounts.get_user_by_token/1
+defp identify_user(token) when is_binary(token) do
+  with {:ok, %{id: user_id}} <- Accounts.get_user_by_token(token) do
+    {:ok, user_id}
   end
 end
 
-# Only the `token` version of this function should be called by a client
-# app, but we still have a `user_id` version for other domains to use and
-# to make the function easier to test.
-def create_page(user_id, params) when is_integer(user_id) do
-  # Actually perform the operation
+# When given an integer, assume it is a user ID.
+defp identify_user(user_id) when is_integer(user_id), do: {:ok, user_id}
+```
+
+Then, use this function inside your public domain functions:
+
+```elixir
+def create_page(user_identifier, params) do
+  with {:ok, user_id} <- identify_user(user_identifier) do
+    # perform the operation
+  end
 end
 ```
+
+#### 2. Identity Protocol
+
+This approach is almost identical to #1, but slightly more extensible.
+Define an `Identity` protocol in your domain, and implement it for
+`Binary` and `Integer`.
+
+```elixir
+defprotocol MyApp.CMS.Identity do
+  @spec identify_user(MyApp.CMS.UserProtocol.t) :: {:ok, integer} | {:error, term}
+  def identify_user(identifier)
+end
+
+defimpl MyApp.CMS.Identity, for: Binary do
+  alias MyApp.Accounts
+
+  def identify_user(token) do
+    with {:ok, %{id: user_id}} <- Accounts.get_user_by_token(token) do
+      {:ok, user_id}
+    end
+  end
+end
+
+defimpl MyApp.CMS.Identity, for: Integer do
+  def identify_user(id), do: {:ok, id}
+end
+```
+
+You can then import the `identify_user` function from the protocol and use
+it as in #1:
+
+```elixir
+import MyApp.CMS.Identity
+
+def create_page(user_identifier, params) do
+  with {:ok, user_id} <- identify_user(user_identifier) do
+    # perform the operation
+  end
+end
+```
+
+Your domain will now accept _anything_ which implements the `Identity` protocol.
+It's easy to switch from approach #1 to this approach, so you don't have to do
+this at first.
 
 ### Authorizing Actions
 
@@ -96,14 +149,13 @@ user actions:
 ```elixir
 import MyApp.CMS.Authorization
 
-def create_page(user_id, params) do
-  with :ok <- authorize(:create_page, user_id) do
+def create_page(user_identifier, params) do
+  with {:ok, user_id} <- identify_user(user_identifier),
+       :ok <- authorize(:create_page, user_id) do
     # create the page
   end
 end
 ```
-
-If you want a DSL for this, you can build one with [Decorator](https://github.com/arjan/decorator).
 
 ### Benefits
 
@@ -173,63 +225,6 @@ This approach to authorization has several benefits.
   In contrast, when you follow the guidelines above, your permission logic will be
   explicit, well documented, decoupled from your client apps, and easily testable.
 
-#### 3. **Doesn't this approach couple all my domains to my `Accounts` domain?**
-
-  Yes, it does. Each domain which needs to enforce permissions relies on 
-  `Accounts.get_user_by_token` to convert tokens into user ids. This coupling can be 
-  reduced by adding a protocol to your domain:
-
-  ```elixir
-  defprotocol MyApp.CMS.Identity do
-     @spec identify_user(MyApp.CMS.UserProtocol.t) :: {:ok, integer} | {:error, term}
-     def identify_user(identifier)
-  end
-  ```
-
-  Since tokens are binaries, you can implement this protocol for tokens by implementing
-  it for binaries. This implementation is where you call out to 
-  `Accounts.get_user_by_token(token)`:
-
-  ```elixir
-  # Implements protocol for tokens
-  defimpl MyApp.CMS.Identity, for: Binary do
-    alias MyApp.Accounts
-
-    def identify_user(token) do
-       with {:ok, %{id: user_id}} <- Accounts.get_user_by_token(token) do
-         {:ok, user_id}
-       end
-    end
-  end
-  ```
-
-  You should implement it for `Integer` too, in case when you're given a user ID rather 
-  than a token.
-
-  ```elixir
-  defimpl MyApp.CMS.Identity, for: Integer do
-     def identify_user(id), do: {:ok, id}
-  end
-  ```
-
-  Then, instead of extra function heads, you can rely on your protocol to convert
-  parameters into user IDs.
-
-  ```elixir
-  alias MyApp.CMS.Identity
-  import MyApp.CMS.Authorization
-
-  def create_page(user_identifier, params) do
-     with {:ok, user_id} <- Identity.identify_user(user_identifier),
-          :ok <- authorize(:create_page, user_id) do
-        # Create the page
-     end
-  end
-  ```
-
-  In this approach, you only reference `Accounts` from your `Identity` protocol
-  implementation, which makes it easier to change and creates less coupling.
-
 ---
 
 ## Dependent Domains
@@ -275,8 +270,7 @@ Instead of relying on a data type from another domain directly, your domain can 
 data protocol which is then _implemented_ for the foreign data type. Your domain's true 
 dependency is then _on the protocol_, not on the data format returned by another domain.
 
-See the [Authorization FAQ](/how-to?id=_3-doesn39t-this-approach-couple-all-my-domains-to-my-accounts-domain)
-for an example.
+See ["Identifying Users"](/how-to?id=identifying-users) for an example.
 
 #### [Behaviours](https://hexdocs.pm/elixir/behaviours.html)
 
