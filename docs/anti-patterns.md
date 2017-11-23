@@ -70,6 +70,8 @@ for more details.
 ---
 
 ## Cross-Domain Ecto Relationships
+This anti-pattern manifests when you create an Ecto relationship between
+a schema in the current domain and a schema in a different domain.
 
 ```elixir
 defmodule MyApp.DomainA.MySchema do
@@ -81,8 +83,8 @@ defmodule MyApp.DomainA.MySchema do
 end
 ```
 
-Instead, define a public function on `DomainB` to get related data
-for your schema.
+Instead, you should define a public function on `DomainB` to get related 
+data for your schema.
 
 ```elixir
 DomainB.list_other_schemas(my_schema_id)
@@ -90,8 +92,8 @@ DomainB.list_other_schemas(my_schema_id)
 
 ### Why
 
-Creating a relationship between domains creates a dependency between them.
-It makes Domain A rely on Domain B's internal data storage logic, tightly
+Creating an Ecto relationship between domain schemas creates a dependency between 
+them. It makes Domain A rely on Domain B's internal data storage logic, tightly
 coupling both domains to that logic.
 
 It encourages you to use implicit data fetching logic via `Repo.preload`
