@@ -90,7 +90,7 @@ Define an `Identity` protocol in your domain, and implement it for
 
 ```elixir
 defprotocol MyApp.CMS.Identity do
-  @spec identify_user(MyApp.CMS.UserProtocol.t) :: {:ok, integer} | {:error, term}
+  @spec identify_user(MyApp.CMS.Identity.t) :: {:ok, integer} | {:error, term}
   def identify_user(identifier)
 end
 
