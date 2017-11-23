@@ -139,10 +139,13 @@ This approach to authorization has several benefits.
 
   **Why it's bad**: It makes your client Phoenix app control how long a user stays logged in, via the
   time-to-live on the Phoenix session cookie.
-    - The logic app can't expire or revoke the session, it must rely on the client
-    - The logic app is no longer in control of an important business concern: session duration
-    - The client app is telling the logic who is logged in, which means that the client
-      can impersonate anyone.
+
+  - The logic app can't expire or revoke the session, it must rely on the client
+
+  - The logic app is no longer in control of an important business concern: session duration
+
+  - The client app is telling the logic who is logged in, which means that the client
+    can impersonate anyone.
 
 #### 2. **Why can't we use Plug or Absinthe Middleware for authorization?**
 
