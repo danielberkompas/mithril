@@ -215,7 +215,7 @@ of its arguments.
 MyApp.CMS.create_page(token, params)
 ```
 
-There are two ways to do this.
+It must then convert that token to a user ID. There are two ways to do this.
 
 #### 1. Function
 
