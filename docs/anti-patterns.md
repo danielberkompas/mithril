@@ -4,6 +4,71 @@ You must avoid the following patterns in your Mithril application.
 
 ---
 
+## Admin Domain
+This anti-pattern manifests when you choose a non-descriptive name for a
+domain, like `Admin`.
+
+The solution is to break the domain down into separate, well-named domains
+for its component features. Often, the functions that were in the `Admin`
+domain can go into existing domains.
+
+!> You can still have "Admin" sections in your client applications that call
+   into your domains. This is fine because "Admin" really describes a place
+   or collection of screens. These are interface concerns which are properly
+   within the scope of a client app.
+
+### Why
+
+`Admin` is not a feature. "Admin" is a user role, or a set of screens
+within your application that let users with that role interact with
+certain features. Domains should not be named for user roles or places,
+they should be named after _features_.
+
+When you have an `Admin` domain, you mix interface concerns (how features
+are grouped together and presented to the user visually) with the actual
+domain logic of the application. 
+
+`Admin` will become a "god" domain, because it has no clear scope or
+limitation on what functions it should contain. Over time, it will come
+to contain a whole mess of unrelated functions and types.
+
+---
+
+## Cross-Domain Ecto Relationships
+This anti-pattern manifests when you create an Ecto relationship between
+a schema in the current domain and a schema in a different domain.
+
+```elixir
+defmodule MyApp.DomainA.MySchema do
+  use Ecto.Schema
+
+  schema "my_table" do
+    has_many :other_schema, MyApp.DomainB.OtherSchema
+  end
+end
+```
+
+Instead, you should define a public function on `DomainB` to get related 
+data for your schema.
+
+```elixir
+DomainB.list_other_schemas(my_schema_id)
+```
+
+### Why
+
+Creating an Ecto relationship between domain schemas creates a dependency between 
+them. It makes Domain A rely on Domain B's internal data storage logic, tightly
+coupling both domains to that logic.
+
+It encourages you to use implicit data fetching logic via `Repo.preload`
+instead of explicit calls with public contracts.
+
+This makes it much harder to refactor Domain A or Domain B's persistence
+later on, which in turn **reduces the scalability** of your app.
+
+---
+
 ## Global User Module
 
 ```elixir
@@ -68,36 +133,3 @@ See ["What's wrong with a global User module?"](https://medium.com/appunite-edu-
 for more details.
 
 ---
-
-## Cross-Domain Ecto Relationships
-This anti-pattern manifests when you create an Ecto relationship between
-a schema in the current domain and a schema in a different domain.
-
-```elixir
-defmodule MyApp.DomainA.MySchema do
-  use Ecto.Schema
-
-  schema "my_table" do
-    has_many :other_schema, MyApp.DomainB.OtherSchema
-  end
-end
-```
-
-Instead, you should define a public function on `DomainB` to get related 
-data for your schema.
-
-```elixir
-DomainB.list_other_schemas(my_schema_id)
-```
-
-### Why
-
-Creating an Ecto relationship between domain schemas creates a dependency between 
-them. It makes Domain A rely on Domain B's internal data storage logic, tightly
-coupling both domains to that logic.
-
-It encourages you to use implicit data fetching logic via `Repo.preload`
-instead of explicit calls with public contracts.
-
-This makes it much harder to refactor Domain A or Domain B's persistence
-later on, which in turn **reduces the scalability** of your app.
