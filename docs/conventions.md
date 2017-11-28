@@ -143,7 +143,6 @@ Mithril's core idea is to **decouple logic from protocol concerns**. This idea
 was originally spearheaded by the Phoenix core team in Phoenix 1.3, and
 Mithril aims to explain and demonstrate how to actually do it. 
 
-Mithril decouples your logic application from your client (protocol) applications.
 This decoupling allows Mithril servers to have both:
 
 - A flexible client architecture
@@ -151,8 +150,7 @@ This decoupling allows Mithril servers to have both:
 
 ### Flexible Client Architecture
 
-Because the logic is decoupled from the protocol and client interface, you
-can easily layer any protocol or interface on top of the same logic core. This
+You can easily layer any protocol or interface on top of the same logic core. This
 greatly increases the scalability and lifetime of the server.
 
 Any of the following architectures (and more) can easily be built on top of
