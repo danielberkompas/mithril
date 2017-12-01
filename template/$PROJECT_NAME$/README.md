@@ -48,3 +48,46 @@ TODO: Briefly describe what <%= @project_name_camel_case %> does
   wraps the business logic from `apps/<%= @project_name %>`.
 
 TODO: describe other apps
+
+<%= if assigns[:deploy] == "heroku" do %>
+## Deployment
+
+<%= @project_name_camel_case %> is intended to be deployed to Heroku. 
+
+```bash
+$ heroku apps:create <%= @project_name %> --remote production
+```
+
+You will need to add the following buildpacks to your Heroku app:
+
+```bash
+$ heroku buildpacks:add https://github.com/HashNuke/heroku-buildpack-elixir
+$ heroku buildpacks:add https://github.com/gjaldon/phoenix-static-buildpack
+```
+
+Read the docs on each buildpack here:
+
+- [Elixir Buildpack](https://github.com/HashNuke/heroku-buildpack-elixir)
+- [Phoenix Static Buildpack](https://github.com/gjaldon/phoenix-static-buildpack)
+
+<%= if assigns[:ecto] == "postgres" do %>
+Create a database for your app:
+
+``bash
+$ heroku addons:create heroku-postgresql:hobby-dev
+```
+<% end %>
+
+Add a `SECRET_KEY_BASE` environment variable:
+
+```bash
+$ heroku config:set SECRET_KEY_BASE=`mix phx.gen.secret`
+```
+
+Once your Heroku app is configured, simply deploy:
+
+```bash
+$ git push heroku master
+$ heroku run mix ecto.migrate
+```
+<% end %>

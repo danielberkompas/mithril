@@ -25,7 +25,7 @@ defmodule Mithril do
 
       # How are you going to deploy the app?
       # Takes "heroku"
-      # deploy: [takes: "host"],
+      deploy: [takes: "host"],
 
       # Boolean: Whether you intend to use Ecto, and if so, which adapter to use.
       # Example: --ecto postgres

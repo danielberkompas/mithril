@@ -1,0 +1,18 @@
+<% MixTemplates.ignore_file_and_directory_unless(assigns[:deploy] == "heroku") %>
+#!/usr/bin/env bash
+#
+# Heroku Asset Compilation Script
+# 
+# Compiles and digests assets from the `<%= @project_name %>_web` app for
+# use on Heroku.
+
+# Generate the assets
+cd $phoenix_dir;
+MIX_ENV=prod npm --prefix ./assets run deploy;
+
+# Digest and Gzip the assets
+mix "${phoenix_ex}.digest";
+
+# We don't need the source asset files after compile. This helps keep
+# the heroku slug size down.
+rm -rf $assets_dir;
