@@ -1,0 +1,22 @@
+<% MixTemplates.ignore_file_unless(assigns[:deploy] == "heroku") %>
+{
+  "name": "<%= @project_name %>",
+  "scripts": {
+    "postdeploy": "mix do ecto.migrate, run apps/<%= @project_name %>/priv/repo/seeds.exs"
+  },
+  "env": {
+    "HEROKU_APP_NAME": {
+      "required": true
+    }
+  },
+  "formation": {},
+  "addons": [],
+  "buildpacks": [
+    {
+      "url": "https://github.com/HashNuke/heroku-buildpack-elixir"
+    },
+    {
+      "url": "https://github.com/gjaldon/phoenix-static-buildpack"
+    }
+  ]
+}

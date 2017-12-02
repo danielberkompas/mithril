@@ -53,6 +53,9 @@ defmodule <%= @project_name_camel_case %>Web.Mixfile do
       {:absinthe_phoenix, "~> 1.4.0"},<% end %><%= if assigns[:gettext] do %>
       {:gettext, "~> 0.11"},<% end %>
       {:<%= @project_name %>, in_umbrella: true},
+      <%= if assigns[:api] do %>
+      {:<%= @project_name %>_api, in_umbrella: true},
+      <% end %>
       {:cowboy, "~> 1.0"}<%= if assigns[:email] do %>,
       {:swoosh, "~> 0.11.0"} # For mailbox preview plug
     <% end %>]

@@ -62,6 +62,9 @@ $ mix gen mithril <project-name> [options]
 - `--ci [type]`: The CI server you intend to use. Supported options:
   - `semaphore`: Generates configuration for [Semaphore](https://semaphoreci.com).
 
+- `--deploy [host]`: The host you intend to serve your Mithril application from.
+  - `heroku`: Generates configuration for [Heroku](https://heroku.com)
+
 - `--ecto [adapter]`: Include Ecto for persistence. Supported adapters:
   - `postgres`
 
