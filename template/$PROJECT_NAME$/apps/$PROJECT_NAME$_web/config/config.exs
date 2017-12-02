@@ -16,8 +16,8 @@ config :<%= @project_name %>_web,
 config :<%= @project_name %>_web, <%= @project_name_camel_case %>Web.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "<%= 64 |> :crypto.strong_rand_bytes() |> Base.encode64() %>",
-  render_errors: [view: <%= @project_name_camel_case %>Web.ErrorView, accepts: ~w(html json)]<%= if assigns[:websockets] do %>,
-  pubsub: [name: <%= @project_name_camel_case %>.PubSub]<% end %>
+  render_errors: [view: <%= @project_name_camel_case %>Web.ErrorView, accepts: ~w(html json)],
+  pubsub: [name: <%= @project_name_camel_case %>Web.PubSub, adapter: Phoenix.PubSub.PG2]
 
 <%= if assigns[:html] == "slim" do %>
 # Configures Slim templates

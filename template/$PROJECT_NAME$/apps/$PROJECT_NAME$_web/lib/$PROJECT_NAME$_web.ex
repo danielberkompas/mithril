@@ -61,22 +61,6 @@ defmodule <%= @project_name_camel_case %>Web do
     quote do
       use Phoenix.Channel
       <%= if assigns[:gettext] do %>import <%= @project_name_camel_case %>Web.Gettext<% end %>
-
-      import Phoenix.Channel,
-        except: [
-          broadcast: 3,
-          broadcast!: 3,
-          broadcast_from: 3,
-          broadcast_from!: 3
-        ]
-
-      import <%= @project_name_camel_case %>.PubSub,
-        only: [
-          broadcast: 2,
-          broadcast!: 2,
-          broadcast_from: 2,
-          broadcast_from!: 2
-        ]
     end
   end
   <% end %>
