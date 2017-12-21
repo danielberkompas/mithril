@@ -20,3 +20,9 @@ config :<%= @project_name %>, <%= @project_name_camel_case %>.Notifications.Emai
 config :<%= @project_name %>,
   reset_password_url: "http://localhost:4000/reset-password"
 <% end %>
+
+<%= if assigns[:error_reporting] == "honeybadger" do %>
+config :honeybadger,
+  api_key: "DEV", #  # Needed so Honeybadger will compile, even though dev env is ignored
+  environment_name: "dev"
+<% end %>

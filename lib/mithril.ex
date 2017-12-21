@@ -38,12 +38,15 @@ defmodule Mithril do
       # Boolean: Whether this project needs to send email.
       email: [],
 
+      # What error reporting service to use
+      error_reporting: [takes: "error reporting service (honeybadger)"],
+
       # Boolean: Whether this project needs internationalization via Gettext.
       gettext: [],
 
       # Boolean: Whether this project will serve HTML, and if so, which template
       # language to use.
-      # 
+      #
       # Example: --html slim
       # Takes "slim", "eex"
       html: [takes: "slim or eex"],

@@ -51,6 +51,9 @@ defmodule <%= @project_name_camel_case %>Web do
   def router do
     quote do
       use Phoenix.Router
+      <%= if assigns[:error_reporting] == "honeybadger" do %>
+        use Honeybadger.Plug
+      <% end %>
       import Plug.Conn
       import Phoenix.Controller
     end

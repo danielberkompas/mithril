@@ -24,7 +24,13 @@ defmodule <%= @project_name_camel_case %>.Mixfile do
   def application do
     [
       mod: {<%= @project_name_camel_case %>.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [
+        :logger,
+        :runtime_tools,
+        <%= if assigns[:error_reporting] == "honeybadger" do %>
+          :honeybadger
+        <% end %>
+      ]
     ]
   end
 
@@ -48,7 +54,10 @@ defmodule <%= @project_name_camel_case %>.Mixfile do
       {:ecto, "~> 2.2"}<% end %><%= if assigns[:email] do %>,
       {:swoosh, "~> 0.11.0"}<% end %><%= if assigns[:accounts] do %>,
       {:comeonin, "~> 4.0.0"},
-      {:bcrypt_elixir, "~> 0.12"}
+      {:bcrypt_elixir, "~> 0.12"},
+    <% end %>
+    <%= if assigns[:error_reporting] == "honeybadger" do %>
+      {:honeybadger, ">= 0.7.0"}
     <% end %>]
   end
 

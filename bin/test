@@ -13,7 +13,7 @@ mix archive.install hex mix_generator --force || { echo 'Could not install mix_g
 mix archive.install hex mix_templates --force || { echo 'Could not install mix_templates!'; exit 1; }
 
 # Generate a kitchen sink app and test it
-mix gen ./ kitchen_sink --ecto postgres --email --accounts --assets --asset-bundler webpack --api graphql --html slim --ci semaphore --websockets --deploy heroku || { echo 'KitchenSink app could not be generated'; exit 1; }
+mix gen ./ kitchen_sink --ecto postgres --email --accounts --assets --asset-bundler webpack --api graphql --html slim --ci semaphore --websockets --error-reporting honeybadger --deploy heroku || { echo 'KitchenSink app could not be generated'; exit 1; }
 
 cd kitchen_sink && {
   bin/setup || { echo 'KitchenSink could not be set up!'; exit 1; }

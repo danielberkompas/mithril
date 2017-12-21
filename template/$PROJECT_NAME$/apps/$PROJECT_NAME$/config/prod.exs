@@ -20,3 +20,9 @@ config :<%= @project_name %>, <%= @project_name_camel_case %>.Repo,
 config :<%= @project_name %>,
   reset_password_url: "http://example.com/reset-password"
 <% end %>
+
+<%= if assigns[:error_reporting] == "honeybadger" do %>
+config :honeybadger,
+  api_key: System.get_env("HONEYBADGER_API_KEY"),
+  environment_name: System.get_env("HONEYBADGER_ENV") || "prod"
+<% end %>

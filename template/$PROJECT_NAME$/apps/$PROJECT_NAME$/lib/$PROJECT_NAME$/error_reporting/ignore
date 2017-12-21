@@ -1,0 +1,2 @@
+<% MixTemplates.ignore_file_and_directory_unless(!is_nil(assigns[:error_reporting])) %>
+<% MixTemplates.ignore_file_unless(false) %>
