@@ -17,35 +17,37 @@ defmodule <%= @project_name_camel_case %>API.Resolvers.Accounts do
   end
 
   @doc """
-  Resolver function returning the current user. Calls `<%= @project_name_camel_case %>.Accounts.get_user_by_token/1`
+  Resolver function returning the current user. Calls `<%= @project_name_camel_case %>.Accounts.authenticate/1`
   to identify the user.
   """
-  def current_user(_args, %{context: context}) do
-    Accounts.get_user_by_token(context[:token])
+  def current_user(_args, %{context: %{token: token}}) do
+    Accounts.authenticate(token)
+  end
+
+  def current_user(_args, _context) do
+    {:error, :invalid_token}
   end
 
   @doc """
   Resolver function to update the current user. Calls `<%= @project_name_camel_case %>.Accounts.update_user/2`
   to perform the update.
   """
-  def update_current_user(%{input: params}, %{context: context}) do
-    with {:ok, %{user: user}} <- Accounts.update_user(context[:token], params) do
+  def update_current_user(%{input: params}, %{context: %{token: token}}) do
+    with {:ok, user} <- Accounts.update_user(token, params) do
       {:ok, %{user: user}}
-    else
-      {:error, :user, changeset, _changes} ->
-        {:error, changeset}
-
-      error ->
-        error
     end  
+  end
+
+  def update_current_user(_args, _context) do
+    {:error, :invalid_token}
   end
 
   @doc """
   Resolver function to create a login token for a given set of user credentials.
-  Calls `<%= @project_name_camel_case %>.Accounts.create_login_token/2`.
+  Calls `<%= @project_name_camel_case %>.Accounts.tokenize/1`.
   """
   def login_user(%{input: params}, _context) do
-    with {:ok, token, user} <- Accounts.create_login_token(params[:email], params[:password]) do
+    with {:ok, token, user} <- Accounts.tokenize({params[:email], params[:password]}) do
       {:ok, %{token: token, user: user}}
     end
   end

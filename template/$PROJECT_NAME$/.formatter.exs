@@ -13,10 +13,13 @@
     arg: 2,
     resolve: 1,
     <% end %>
-    <%= if assigns[:accounts] do %>
+    <%= if assigns[:ecto] do %>
 
-    # Internal custom functions
-    assert_login_required: 1,
+    # Ecto
+    add: 2,
+    create: 1,
+    create: 2,
+    belongs_to: 2,
     <% end %>
 
     # Phoenix
@@ -27,6 +30,13 @@
     post: 3,
     patch: 3,
     put: 3,
-    forward: 3
+    forward: 3,
+    resources: 2,
+    resources: 3,
+    <%= if assigns[:accounts] do %>
+
+    # Internal custom functions
+    assert_login_required: 1
+    <% end %>
   ]
 ]

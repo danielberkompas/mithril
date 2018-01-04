@@ -27,7 +27,7 @@ defmodule <%= @project_name_camel_case %>.Notifications do
       iex> Notifications.forgot_password("test@email.com", "token")
       {:ok, %{...}}
   """
-  def forgot_password(email, token) do
+  def forgot_password(email, %{token: token}) do
     email
     |> Email.forgot_password(token)
     |> Mailer.deliver

@@ -46,7 +46,7 @@ defmodule <%= @project_name_camel_case %>Web.Router do
   <%= if assigns[:html] do %>
 
   scope "/", <%= @project_name_camel_case %>Web do
-    pipe_through :browser # Use the default browser stack
+    pipe_through :browser
 
     <%= if assigns[:html] do %>
     get "/", PageController, :index
@@ -60,10 +60,13 @@ defmodule <%= @project_name_camel_case %>Web.Router do
 
     get "/register", RegistrationController, :new
     post "/register", RegistrationController, :create
+
     get "/forgot-password", ForgotPasswordController, :new
     post "/forgot-password", ForgotPasswordController, :create
+
     get "/reset-password", ResetPasswordController, :new
     post "/reset-password", ResetPasswordController, :create
+
     get "/login", SessionController, :new
     post "/login", SessionController, :create
     get "/logout", SessionController, :delete

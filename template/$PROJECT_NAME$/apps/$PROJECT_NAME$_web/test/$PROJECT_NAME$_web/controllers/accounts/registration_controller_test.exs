@@ -33,7 +33,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationControllerTest
       conn = post(conn, Routes.registration_path(conn, :create), params)
 
       assert conn.assigns.token
-      assert {:ok, _} = Accounts.get_user_by_token(conn.assigns.token)
+      assert {:ok, _} = Accounts.authenticate(conn.assigns.token)
       assert get_flash(conn, :success)
       assert redirected_to(conn) =~ Routes.page_path(conn, :index)
     end
@@ -58,7 +58,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationControllerTest
   end
 
   describe ".edit/2" do
-    setup [:create_user, :create_login_token]
+    setup [:create_user, :create_token]
 
     test "requires user to be logged in", %{conn: conn} do
       assert_login_required fn ->
@@ -83,7 +83,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationControllerTest
   end
 
   describe ".update/2" do
-    setup [:create_user, :create_login_token]
+    setup [:create_user, :create_token]
 
     test "requires user to be logged in", %{conn: conn} do
       assert_login_required fn ->
@@ -107,7 +107,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationControllerTest
 
       assert get_flash(conn, :success)
       assert html_response(conn, 200) =~ "form"
-      assert {:ok, _token, _user} = Accounts.create_login_token("new@email.com", "new_password")
+      assert {:ok, _token} = Accounts.tokenize({"new@email.com", "new_password"})
     end
   end
 

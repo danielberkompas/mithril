@@ -4,12 +4,15 @@ defmodule <%= @project_name_camel_case %>.AccountsTest do
 
   import <%= @project_name_camel_case %>.AccountsFactory, only: [
     create_user: 1,
-    create_login_token: 1,
+    create_token: 1,
     create_reset_password_token: 1,
     expire_token!: 1
   ]
 
-  alias <%= @project_name_camel_case %>.Accounts
+  alias <%= @project_name_camel_case %>.{
+    Accounts,
+    Accounts.Token
+  }
 
   @valid_user_params %{
     email: "test@example.com",
@@ -45,44 +48,41 @@ defmodule <%= @project_name_camel_case %>.AccountsTest do
     end
   end
 
-  describe ".create_login_token/2" do
+  describe ".tokenize/2" do
     setup [:create_user]
 
     test "returns a login token if credentials are valid" do
-      {:ok, token, user} = Accounts.create_login_token("test@example.com", "password")
-      assert is_binary(token)
-      assert user.id
-      assert user.email == "test@example.com"
+      assert {:ok, %Token{}} = Accounts.tokenize({"test@example.com", "password"})
     end
 
     test "returns error if credentials are invalid" do
-      assert {:error, :invalid_credentials} = Accounts.create_login_token("invalid@email.com", "password")
+      assert {:error, :invalid_email} = Accounts.tokenize({"invalid@email.com", "password"})
     end
   end
 
-  describe ".get_user_by_token/2" do
-    setup [:create_user, :create_login_token]
+  describe ".authenticate/2" do
+    setup [:create_user, :create_token]
 
     test "returns the user if token is valid", %{token: token, user: original_user} do
-      assert {:ok, user} = Accounts.get_user_by_token(token, :login)
+      assert {:ok, user} = Accounts.authenticate(token)
       assert user.id == original_user.id
     end
 
     test "returns error if token is invalid" do
-      assert {:error, :invalid_token} = Accounts.get_user_by_token("invalid")
+      assert {:error, :invalid_token} = Accounts.authenticate(%Token{token: "invalid"})
     end
   end
 
-  describe ".forgot_user_password/1" do
+  describe ".recover/1" do
     setup [:create_user]
 
     test "sends token if email is valid", %{user: user} do
-      assert {:ok, _} = Accounts.forgot_user_password(user.email)
+      assert {:ok, _} = Accounts.recover(user.email)
       assert_received {:email, _email}
     end
 
     test "returns error if email is invalid" do
-      assert {:error, :invalid_email} = Accounts.forgot_user_password("nonexistent@email.com")
+      assert {:error, :invalid_email} = Accounts.recover("nonexistent@email.com")
     end
   end
 
@@ -90,8 +90,8 @@ defmodule <%= @project_name_camel_case %>.AccountsTest do
     setup [:create_user, :create_reset_password_token]
 
     test "changes email if token is valid", %{token: token} do
-      assert {:ok, %{user: user}} =
-        Accounts.update_user(token, %{
+      assert {:ok, user} =
+        Accounts.update_user(%Token{token: token}, %{
           email: "new@email.com"
         })
 
@@ -100,17 +100,17 @@ defmodule <%= @project_name_camel_case %>.AccountsTest do
 
     test "changes password if reset token is valid", %{user: user, token: token} do
       assert {:ok, _} = 
-        Accounts.update_user(token, %{
+        Accounts.update_user(%Token{token: token}, %{
           password: "new_password",
           password_confirmation: "new_password"
         })
 
-      assert {:ok, _token, _user} = Accounts.create_login_token(user.email, "new_password")
+      assert {:ok, _token} = Accounts.tokenize({user.email, "new_password"})
     end
 
     test "returns validation errors if passwords don't match", %{token: token} do
-      assert {:error, :user, %{errors: errors}, _} =
-        Accounts.update_user(token, %{
+      assert {:error, %Ecto.Changeset{errors: errors}} =
+        Accounts.update_user(%Token{token: token}, %{
           password: "new_password",
           password_confirmation: "mismatch"
         })
@@ -121,8 +121,8 @@ defmodule <%= @project_name_camel_case %>.AccountsTest do
     test "returns error if reset token has expired", %{token: token} do
       expire_token!(token)
       
-      assert {:error, :invalid_token} =
-        Accounts.update_user(token, %{
+      assert {:error, :expired_token} =
+        Accounts.update_user(%Token{token: token}, %{
           password: "new_password",
           password_confirmation: "new_password"
         })
@@ -130,27 +130,10 @@ defmodule <%= @project_name_camel_case %>.AccountsTest do
 
     test "returns error if reset token does not exist" do
       assert {:error, :invalid_token} = 
-        Accounts.update_user("nonexistent", %{
+        Accounts.update_user(%Token{token: "nonexistent"}, %{
           password: "new_password",
           password_confirmation: "new_password"
         })
-    end
-  end
-
-  describe ".validate_token/1" do
-    setup [:create_user, :create_login_token]
-
-    test "returns :ok when token is valid", %{token: token} do
-      assert :ok = Accounts.validate_token(token)
-    end
-
-    test "returns error when token does not exist" do
-      assert {:error, :not_found} = Accounts.validate_token("nonexistent")
-    end
-
-    test "returns error when token has expired", %{token: token} do
-      expire_token!(token)
-      assert {:error, :expired} = Accounts.validate_token(token)
     end
   end
 end

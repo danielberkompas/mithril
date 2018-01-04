@@ -4,11 +4,11 @@ defmodule <%= @project_name_camel_case %>API.Accounts.QueryTest do
   import <%= @project_name_camel_case %>.AccountsFactory,
     only: [
       create_user: 1,
-      create_login_token: 1
+      create_token: 1
     ]
 
   describe "current_user" do
-    setup [:create_user, :create_login_token]
+    setup [:create_user, :create_token]
 
     test "returns current user if logged in", %{user: user, token: token} do
       {:ok, %{data: data}} = run(query(:current_user), context: %{token: token})

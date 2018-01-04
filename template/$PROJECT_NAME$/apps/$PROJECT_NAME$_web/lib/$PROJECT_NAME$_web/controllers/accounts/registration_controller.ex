@@ -15,7 +15,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationController do
 
   def create(conn, %{"user" => params}) do
     with {:ok, user} <- Accounts.create_user(params),
-         {:ok, token, _user} <- Accounts.create_login_token(user.email, params["password"])
+         {:ok, token} <- Accounts.tokenize({user.email, params["password"]})
     do
       conn
       |> Session.put_token(token)
@@ -36,7 +36,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationController do
   end
 
   def update(conn, %{"user" => params}) do
-    with {:ok, %{user: user}} <- Accounts.update_user(conn.assigns.token, params),
+    with {:ok, user} <- Accounts.update_user(conn.assigns.token, params),
          {:ok, changeset} <- Accounts.change_user(user)
     do
       conn

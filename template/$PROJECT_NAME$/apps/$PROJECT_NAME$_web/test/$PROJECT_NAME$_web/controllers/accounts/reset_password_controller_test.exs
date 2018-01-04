@@ -50,7 +50,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.ResetPasswordControllerTes
 
       assert get_flash(conn, :success)
       assert redirected_to(conn) == Routes.session_path(conn, :new)
-      assert {:ok, _token, _user} = Accounts.create_login_token(user.email, "new_password")
+      assert {:ok, _token} = Accounts.tokenize({user.email, "new_password"})
     end
 
     test "redirects with error if token does not exist", %{conn: conn} do

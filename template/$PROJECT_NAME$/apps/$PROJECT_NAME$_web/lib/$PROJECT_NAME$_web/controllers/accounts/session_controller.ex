@@ -11,12 +11,12 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.SessionController do
   end
 
   def create(conn, %{"user" => %{"email" => email, "password" => password}}) do
-    case Accounts.create_login_token(email, password) do
-      {:ok, token, _user} ->
+    case Accounts.tokenize({email, password}) do
+      {:ok, token} ->
         conn
         |> Session.put_token(token)
         |> redirect(to: Routes.page_path(conn, :index))
-      {:error, :invalid_credentials} ->
+      {:error, _reason} ->
         conn
         |> put_status(400)
         |> put_flash(:error, "Invalid email/password combination. Try again?")

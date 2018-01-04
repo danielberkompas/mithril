@@ -14,6 +14,8 @@ defmodule <%= @project_name_camel_case %>API.Context do
   @behaviour Plug
   import Plug.Conn
 
+  alias <%= @project_name_camel_case %>.Accounts.Token
+
   def init(opts), do: opts
 
   def call(conn, _opts) do
@@ -24,7 +26,7 @@ defmodule <%= @project_name_camel_case %>API.Context do
   defp build_context(conn) do
     case get_req_header(conn, "authorization") do
       ["Bearer " <> token] ->
-        %{token: token}
+        %{token: %Token{token: token}}
       _ ->
         %{}
     end

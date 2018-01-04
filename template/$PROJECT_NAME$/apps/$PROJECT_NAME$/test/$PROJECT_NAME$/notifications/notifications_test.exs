@@ -7,7 +7,7 @@ defmodule <%= @project_name_camel_case %>.NotificationsTest do
   
   describe ".forgot_password/2" do
     test "sends forgot password email" do
-      Notifications.forgot_password("test@example.com", "my-token")
+      Notifications.forgot_password("test@example.com", %{token: "my-token"})
       assert_received {:email, email}
       for body <- [email.text_body, email.html_body] do
         assert body =~ Application.get_env(:<%= @project_name %>, :reset_password_url)

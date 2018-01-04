@@ -1,14 +1,29 @@
 defmodule <%= @project_name_camel_case %>.Accounts.Token do
   @moduledoc """
-  A login or reset password token which is used to identify an `Account.User`.
+  A login or recovery token which is used to identify an `Lab.Accounts.User`.
+
+  ## Example
+
+      %Lab.Accounts.Token{
+        id: 123,
+        purpose: :any,
+        token: "ZKtJtotypydGVqGPaU/yfXrw5eNSkdvEmpueODc/UwI=",
+        expires_at: #{inspect(DateTime.utc_now())},
+        last_used_at: #{inspect(DateTime.utc_now())}
+      }
   """
 
   use Ecto.Schema
   import Ecto.Changeset
 
+  defmodule Purpose do
+    use Exnumerator, values: [:any, :recovery]
+  end
+
   schema "user_tokens" do
-    field :user_id, :integer
-    field :type, :string
+    belongs_to :user, <%= @project_name_camel_case %>.Accounts.User
+
+    field :purpose, Purpose
     field :token, :string
     field :expires_at, :utc_datetime
     field :last_used_at, :utc_datetime
@@ -17,19 +32,12 @@ defmodule <%= @project_name_camel_case %>.Accounts.Token do
   end
 
   @doc false
-  def insert_changeset(struct, params \\ %{}) do
+  def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:type, :expires_at])
-    |> validate_inclusion(:type, ["login", "reset_password"])
+    |> cast(params, [:purpose, :expires_at, :last_used_at])
     |> put_token()
     |> put_expires_at()
     |> put_last_used_at()
-  end
-
-  @doc false
-  def update_changeset(struct, params \\ %{}) do
-    struct
-    |> cast(params, [:expires_at, :last_used_at])
   end
 
   defp put_token(changeset) do
