@@ -53,6 +53,8 @@ defmodule <%= @project_name_camel_case %>.Mixfile do
       {:postgrex, ">= 0.0.0"}<% end %><%= if assigns[:ecto] do %>,
       {:ecto, "~> 2.2"}<% end %><%= if assigns[:email] do %>,
       {:swoosh, "~> 0.11.0"}<% end %><%= if assigns[:accounts] do %>,
+      {:authority, "~> 0.2.0"},
+      {:exnumerator, ">= 0.0.0"},
       {:comeonin, "~> 4.0.0"},
       {:bcrypt_elixir, "~> 0.12"},
     <% end %>

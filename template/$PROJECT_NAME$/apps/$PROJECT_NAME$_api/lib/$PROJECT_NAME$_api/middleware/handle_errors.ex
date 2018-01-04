@@ -16,7 +16,7 @@ defmodule <%= @project_name_camel_case %>API.Middleware.HandleErrors do
   @behaviour Absinthe.Middleware
   <%= if assigns[:accounts] do %>
 
-  defp handle_error(:invalid_credentials) do
+  defp handle_error(reason) when reason in ~w(invalid_email invalid_password)a do
     {:error, "invalid email or password"}
   end
 

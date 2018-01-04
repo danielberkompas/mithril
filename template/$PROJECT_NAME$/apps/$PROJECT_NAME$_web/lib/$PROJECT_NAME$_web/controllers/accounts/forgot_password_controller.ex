@@ -12,7 +12,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.ForgotPasswordController d
   def create(conn, %{"user" => %{"email" => email}}) do
     # We don't want to give away whether a user account exists with a
     # given email address via this form, so we always assume success.
-    Accounts.forgot_user_password(email)
+    Accounts.recover(email)
 
     conn
     |> put_flash(:success, "Password reset instructions sent! (If #{email} is a real account)")

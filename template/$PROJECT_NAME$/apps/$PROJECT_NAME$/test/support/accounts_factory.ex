@@ -13,7 +13,7 @@ defmodule <%= @project_name_camel_case %>.AccountsFactory do
       import <%= @project_name_camel_case %>.AccountsFactory
 
       describe ".function/0" do
-        setup [:create_user, :create_login_token]
+        setup [:create_user, :create_token]
 
         test "my test", %{user: user, token: token} do
           # ...
@@ -47,13 +47,13 @@ defmodule <%= @project_name_camel_case %>.AccountsFactory do
   end
 
   @doc """
-  Creates a login token for the `context[:user]` with `<%= @project_name_camel_case %>.Accounts.create_login_token/2`.
+  Creates a login token for the `context[:user]` with `<%= @project_name_camel_case %>.Accounts.create_token/2`.
 
   Must be used together with `create_user/1`.
   """
-  @spec create_login_token(Keyword.t) :: {:ok, [token: Accounts.user_token]}
-  def create_login_token(context) do
-    {:ok, token, _} = Accounts.create_login_token(context[:user].email, "password")
+  @spec create_token(Keyword.t) :: {:ok, [token: Accounts.user_token]}
+  def create_token(context) do
+    {:ok, token} = Accounts.tokenize({context[:user].email, "password"})
     {:ok, [token: token]}
   end
 
@@ -64,7 +64,7 @@ defmodule <%= @project_name_camel_case %>.AccountsFactory do
   """
   @spec create_reset_password_token(Keyword.t) :: {:ok, [token: Accounts.user_token]}
   def create_reset_password_token(context) do
-    {:ok, _} = Accounts.forgot_user_password(context[:user].email)
+    {:ok, _} = Accounts.recover(context[:user].email)
     assert_received {:email, email}
     [[_, token]] = Regex.scan(~r/token=(.*)/, email.text_body)
 

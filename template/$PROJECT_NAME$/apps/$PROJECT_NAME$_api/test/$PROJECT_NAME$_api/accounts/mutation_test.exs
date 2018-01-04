@@ -4,7 +4,7 @@ defmodule <%= @project_name_camel_case %>API.Accounts.MutationTest do
   import <%= @project_name_camel_case %>.AccountsFactory,
     only: [
       create_user: 1,
-      create_login_token: 1
+      create_token: 1
     ]
 
   describe "create_user" do
@@ -80,7 +80,7 @@ defmodule <%= @project_name_camel_case %>API.Accounts.MutationTest do
   end
 
   describe "update_current_user" do
-    setup [:create_user, :create_login_token]
+    setup [:create_user, :create_token]
 
     test "requires login" do
       assert_invalid_token(

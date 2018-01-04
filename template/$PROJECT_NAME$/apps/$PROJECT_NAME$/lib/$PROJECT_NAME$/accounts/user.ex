@@ -1,11 +1,22 @@
 defmodule <%= @project_name_camel_case %>.Accounts.User do
   @moduledoc """
-  Represents a user on the <%= @project_name_camel_case %> platform, for
-  authentication purposes.
+  Represents a user on the <%= @project_name_camel_case %> platform, for authentication purposes.
+
+  ## Example
+
+      %<%= @project_name_camel_case %>.Accounts.User{
+        id: 123,
+        email: "my@email.com",
+        encrypted_password: "$2b$12$8kkvCB7/Nt8NxvsMeEthRuNetesDBqde27Nk3t6n3wQvJiXXDxDRi",
+        password: nil,             # virtual
+        password_confirmation: nil # virtual
+        inserted_at: #{inspect(DateTime.utc_now())},
+        updated_at: #{inspect(DateTime.utc_now())}
+      }
 
   ## Usage
 
-  You should **strongly** resist adding any fields to this struct. It is not
+  You should **strongly** resist adding _any_ fields to this struct. It is not
   intended to be a global store for user state. Instead, each domain should
   manage its own user-related data, referencing only the user ID.
 
@@ -15,9 +26,9 @@ defmodule <%= @project_name_camel_case %>.Accounts.User do
   Permissions associated with each user should likewise be stored in a
   `Permissions` domain, referencing the user ID.
 
-  Do not create Ecto associations between this schema and schemas in other
+  **Do not** create Ecto associations between this schema and schemas in other
   domains. This preserves the separation of the domains and enforces that
-  all queries be made through a public domain function.
+  all queries be made through a public domain function. 
   """
 
   use Ecto.Schema
@@ -37,27 +48,25 @@ defmodule <%= @project_name_camel_case %>.Accounts.User do
   end
 
   @doc false
-  def insert_changeset(struct, params \\ %{}) do
+  def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:email, :password, :password_confirmation])
-    |> validate_required([:password, :password_confirmation])
-    |> validate()
-  end
-
-  @doc false
-  def update_changeset(struct, params \\ %{}) do
-    struct
-    |> cast(params, [:email, :password, :password_confirmation])
-    |> validate()
-  end
-
-  defp validate(changeset) do
-    changeset
     |> validate_required([:email])
     |> unique_constraint(:email)
     |> validate_format(:email, ~r/^[A-Z0-9'._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "invalid email address")
-    |> validate_confirmation(:password)
+    |> validate_password()
     |> encrypt_password()
+  end
+
+  defp validate_password(%{data: %{id: id}} = changeset) when id != nil do
+    changeset
+    |> validate_confirmation(:password)
+  end
+
+  defp validate_password(changeset) do
+    changeset
+    |> validate_required([:password, :password_confirmation])
+    |> validate_confirmation(:password)
   end
 
   defp encrypt_password(changeset) do

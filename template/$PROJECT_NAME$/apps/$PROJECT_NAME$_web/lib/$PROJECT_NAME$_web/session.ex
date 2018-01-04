@@ -23,10 +23,10 @@ defmodule <%= @project_name_camel_case %>Web.Session do
   @doc """
   Puts a `<%= @project_name_camel_case %>.Accounts` token into the `conn` session and `conn.assigns`.
   """
-  @spec put_token(Plug.Conn.t, String.t | list) :: Plug.Conn.t
-  def put_token(%Plug.Conn{} = conn, token) when is_binary(token) do
+  @spec put_token(Plug.Conn.t(), Accounts.Token.t()) :: Plug.Conn.t
+  def put_token(%Plug.Conn{} = conn, token) do
     conn
-    |> put_session(:token, token)
+    |> put_session(:token, token.token)
     |> assign(:token, token)
   end
 
@@ -38,10 +38,12 @@ defmodule <%= @project_name_camel_case %>Web.Session do
   def load_token(%Plug.Conn{} = conn, _opts) do
     token = get_session(conn, :token)
 
-    if token do
-      assign(conn, :token, token)
-    else
-      conn
+    case Accounts.get_token(token) do
+      {:ok, token} ->
+        assign(conn, :token, token)
+
+      _other ->
+        conn
     end
   end
 
@@ -53,7 +55,7 @@ defmodule <%= @project_name_camel_case %>Web.Session do
   @spec require_token(Plug.Conn.t, list) :: Plug.Conn.t
   def require_token(%Plug.Conn{} = conn, _opts) do
     with %{assigns: %{token: token}} <- load_token(conn, []),
-         :ok <- Accounts.validate_token(token)
+         {:ok, _user} <- Accounts.authenticate(token)
     do
       conn
     else
