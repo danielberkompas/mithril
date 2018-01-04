@@ -174,119 +174,102 @@ patterns.
 
 ### Project Setup
 
-If your application has users, you should pass the `--accounts` option
+If your application has users, you can pass the `--accounts` option
 to Mithril's project generator.
 
 ```bash
 $ mix gen mithril my_app --accounts --ecto postgres --email
 ```
 
-This will generate an `Accounts` domain in your `my_app` logic app, with
-support for:
+This will generate an `Accounts` domain based on
+[Authority](https://github.com/infinitered/authority) in your `my_app` logic
+app, with support for:
 
 - User registration (email/password)
 - Login with email/password (creates unique, expiring tokens)
 - Forgot password
 
+It will also generate the necessary Phoenix controllers in your `my_app_web`
+OTP app.
+
 ### Authentication
 
-Mithril's `Accounts` domain uses token authentication. A client app
+The `Accounts` domain uses token authentication. A client app
 submits credentials it received from a human, and receives a unique,
 expiring `token` back.
 
 ```elixir
-Accounts.create_login_token("my@email.com", "password")
-# => {:ok, "uJHr9+dfj4fNj8cGk8EUCQ==", %Accounts.User{...}}
+Accounts.tokenize({"my@email.com", "password"})
+# => {:ok, %Accounts.Token{token: "uJHr9+dfj4fNj8cGk8EUCQ=="}}
 ```
 
 The client app is responsible to store this `token` and pass it in subsequent
 calls to domain functions.
 
-- A **Phoenix** client might store the `token` in the **cookie session**
+- A **Phoenix** client will store the `token` in the **cookie session** (See
+  the generated `MyAppWeb.Session` module for how to do this)
 - A **GraphQL/REST** client might give the `token` to a mobile app to store
 
-### Identifying Users
+### Identifying Users in Other Domains
 
-Each domain function that needs to identify a user must take a `token` as one
-of its arguments.
+Each domain function that needs to identify a user must take an
+`Accounts.Token` as one of its arguments.
 
 ```elixir
 # only some users can create pages
 MyApp.CMS.create_page(token, params)
 ```
 
-It must then convert that token to a user ID. There are two ways to do this.
-
-#### 1. Function
-
-Add a private `identify_user` function to your domain:
+It must then convert that token to a user ID. The simplest way to do this is
+to just call `Accounts.authenticate` from your function.
 
 ```elixir
-# When given a binary, assume it is a token and pass it along to
-# Accounts.get_user_by_token/1
-defp identify_user(token) when is_binary(token) do
-  with {:ok, %{id: user_id}} <- Accounts.get_user_by_token(token) do
-    {:ok, user_id}
-  end
-end
-
-# When given an integer, assume it is a user ID.
-defp identify_user(user_id) when is_integer(user_id), do: {:ok, user_id}
-```
-
-Then, use this function inside your public domain functions:
-
-```elixir
-def create_page(user_identifier, params) do
-  with {:ok, user_id} <- identify_user(user_identifier) do
-    # perform the operation
+def create_page(token, params) do
+  with {:ok, %{user: %{id: user_id}}} <- Accounts.authenticate(token) do
+    # Create a page if the user_id is allowed to do so
   end
 end
 ```
 
-#### 2. Identity Protocol
-
-This approach is almost identical to #1, but slightly more extensible.
-Define an `Identity` protocol in your domain, and implement it for
-`Binary` and `Integer`.
+Or, you can isolate all the calls to `Accounts` into a protocol, named
+`Identity`.
 
 ```elixir
 defprotocol MyApp.CMS.Identity do
-  @spec identify_user(MyApp.CMS.Identity.t) :: {:ok, integer} | {:error, term}
-  def identify_user(identifier)
+  @spec user_id(any) :: {:ok, user_id} | {:error, term}
+  def user_id(identity)
 end
 
-defimpl MyApp.CMS.Identity, for: Binary do
-  alias MyApp.Accounts
+# Support plain integer User IDs for convenience in tests
+defimpl MyApp.CMS.Identity, for: Integer do
+  def user_id(id) do
+    {:ok, id}
+  end
+end
 
-  def identify_user(token) do
-    with {:ok, %{id: user_id}} <- Accounts.get_user_by_token(token) do
-      {:ok, user_id}
+# Support `Accounts.Token` structs
+defimpl MyApp.CMS.Identity, for: MyApp.Accounts.Token do
+  def user_id(token) do
+    with {:ok, %{id: id} <- MyApp.Accounts.authenticate(token) do
+      {:ok, id}
     end
   end
 end
-
-defimpl MyApp.CMS.Identity, for: Integer do
-  def identify_user(id), do: {:ok, id}
-end
 ```
 
-You can then import the `identify_user` function from the protocol and use
-it as in #1:
+This helps DRY up your logic, especially if you have many functions which
+all need to do the same thing.
 
 ```elixir
-import MyApp.CMS.Identity
-
-def create_page(user_identifier, params) do
-  with {:ok, user_id} <- identify_user(user_identifier) do
-    # perform the operation
+def create_page(identity, params) do
+  with {:ok, user_id} <- Identity.user_id(identity) do
+    # Decide whether the user_id is allowed to create the page
   end
 end
 ```
 
-Your domain will now accept _anything_ which implements the `Identity` protocol.
-It's easy to switch from approach #1 to this approach, so you don't have to do
-this at first.
+It also has the added benefit that it's easy to extend the domain to accept
+other structs, as long as a user_id can be deduced from them.
 
 ### Authorizing Actions
 
@@ -311,8 +294,8 @@ user actions:
 ```elixir
 import MyApp.CMS.Authorization
 
-def create_page(user_identifier, params) do
-  with {:ok, user_id} <- identify_user(user_identifier),
+def create_page(identity, params) do
+  with {:ok, user_id} <- Identity.user_id(identity),
        :ok <- authorize(:create_page, user_id) do
     # create the page
   end
@@ -328,7 +311,7 @@ This approach to authorization has several benefits.
       we can be very confident that those rules are _always applied_.
     - Client logins can be revoked by the logic app. For example, when a user
       changes their password in the mobile app, we can easily revoke all web
-      sessions for that user.
+      sessions for that user by removing or invalidating tokens.
 
 2. **Simplicity**
     - All client apps use the same authentication method: tokens.
@@ -432,7 +415,7 @@ Instead of relying on a data type from another domain directly, your domain can 
 data protocol which is then _implemented_ for the foreign data type. Your domain's true 
 dependency is then _on the protocol_, not on the data format returned by another domain.
 
-See ["Identifying Users"](/how-to?id=identifying-users) for an example.
+See ["Identifying Users"](/how-to?id=identifying-users-in-other-domains) for an example.
 
 #### [Behaviours](https://hexdocs.pm/elixir/behaviours.html)
 

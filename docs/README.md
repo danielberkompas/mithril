@@ -27,8 +27,8 @@ that the backend server is maintainable over the long term.
 
 None of these conventions are "new" to the Elixir community. Mithril
 simply explains existing tools and demonstrates best practices for
-building scalable Elixir applications. Mithril is _not code_, it's a
-name for a set of conventions.
+building scalable Elixir applications. _Mithril is not a framework_, it's 
+a name for a set of conventions.
 
 Read more about:
 

@@ -29,8 +29,8 @@ are grouped together and presented to the user visually) with the actual
 domain logic of the application. 
 
 `Admin` will become a "god" domain, because it has no clear scope or
-limitation on what functions it should contain. Over time, it will come
-to contain a whole mess of unrelated functions and types.
+limitation on what functions it should contain. Over time, it will fill up
+with a mess of unrelated functions and types.
 
 ---
 
@@ -106,11 +106,11 @@ Whenever you need profile information, fetch it using a `Profiles` domain
 function.
 
 ```elixir
-Profiles.get_profile(user_id)
+Profiles.get_profile(user_id) # Or an Accounts.Token struct
 ```
 
-Also, you should only pass `user_id` to other domain functions, not the
-entire user struct.
+Pass either a raw `user_id` or `Accounts.Token` struct (as described in the
+[Authorization guide](/how-to?id=authorization)), not the full user.
 
 ### Why
 
