@@ -21,8 +21,6 @@ and a name for a set of architecture conventions.
 | [Absinthe](https://absinthe-graphql.org)                         | Yes      | GraphQL APIs (for mobile apps) |
 | [Webpack](https://webpack.js.org/) / [Brunch](http://brunch.io/) | Yes      | Front-end assets (JS/CSS)      |
 
-See the [documentation](https://infinitered.github.io/mithril) for more details.
-
 ## Install
 
 Mithril works best with a pre-release version of Elixir: `1.6.0-rc.0`.
@@ -44,8 +42,6 @@ $ mix archive.install hex mix_templates
 $ git clone git@github.com:infinitered/mithril.git
 $ mix template.install mithril
 ```
-
-See the [documentation](https://infinitered.github.io/mithril) for usage details.
 
 ## Premium Support
 
