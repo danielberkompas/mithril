@@ -7,16 +7,23 @@ scalable backend server. It uses Elixir for reliability and scalability, and
 a set of conventions to ensure that the backend server is maintainable over
 the long term.
 
-None of these conventions are "new" to the Elixir community. Mithril simply
-explains existing tools and demonstrates best practices for building scalable
-Elixir applications. _Mithril is not a framework_, it's a project generator
-and a name for a set of architecture conventions.
+Mithril is not a framework. It has two parts:
 
-## Technologies Used
+1. **Project Generator**: A project generator which sets up your project
+   with good defaults and architecture.
+
+2. **Conventions**: A set of conventions described in the Mithril
+   documentation. None of these conventions are new to the Elixir community.
+   Mithril simply explains existing tools and demonstrates best practices.
+
+## Technologies Supported
+
+Other than Elixir, Mithril does not dictate your technology choices.
+However, the project generator can generate projects with support for
+any of the libraries listed below.
 
 | Name                                                             | Optional | Purpose                        |
 | ---------------------------------------------------------------- | -------- | ------------------------------ |
-| [Elixir](https://elixir-lang.org)                                | No       | Backend programming language   |
 | [Authority](https://github.com/infinitered/authority)            | Yes      | Authentication library         |
 | [Absinthe](https://absinthe-graphql.org)                         | Yes      | GraphQL APIs (for mobile apps) |
 | [Phoenix](https://phoenixframework.org)                          | Yes      | HTTP/Websocket support         |
