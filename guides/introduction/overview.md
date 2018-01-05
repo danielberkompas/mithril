@@ -10,8 +10,9 @@ highly scalable backend server.
 | Name                                                             | Optional | Purpose                        |
 | ---------------------------------------------------------------- | -------- | ------------------------------ |
 | [Elixir](https://elixir-lang.org)                                | No       | Backend programming language   |
-| [Phoenix](https://phoenixframework.org)                          | Yes      | HTTP/Websocket support         |
+| [Authority](https://github.com/infinitered/authority)            | Yes      | Authentication library         |
 | [Absinthe](https://absinthe-graphql.org)                         | Yes      | GraphQL APIs (for mobile apps) |
+| [Phoenix](https://phoenixframework.org)                          | Yes      | HTTP/Websocket support         |
 | [Webpack](https://webpack.js.org/) / [Brunch](http://brunch.io/) | Yes      | Front-end assets (JS/CSS)      |
 
 ## Why
