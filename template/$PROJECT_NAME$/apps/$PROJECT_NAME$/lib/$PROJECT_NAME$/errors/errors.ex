@@ -1,4 +1,4 @@
-defmodule <%= @project_name_camel_case %>.ErrorReporting do
+defmodule <%= @project_name_camel_case %>.Errors do
   @moduledoc """
   Provides error reporting functionality to <%= assigns[:error_reporting] || "the error reporting servicce" %>
 
@@ -7,7 +7,7 @@ defmodule <%= @project_name_camel_case %>.ErrorReporting do
   1. Notify <%= @error_reporting || "the error reporting service" %> of an Error
 
      ```elixir
-     <%= @project_name_camel_case %>.ErrorReporting.notify(error, %{user_email: "johndoe@example.com"})
+     <%= @project_name_camel_case %>.Errors.notify(error, %{user_email: "johndoe@example.com"})
      ```
 
   2. Set error Context
@@ -16,7 +16,7 @@ defmodule <%= @project_name_camel_case %>.ErrorReporting do
   resource(s) being acted upon, and the state of aforementioned action(s).
 
      ```elixir
-     <%= @project_name_camel_case %>.ErrorReporting.context(%{user_email: "johndoe@example.com"})
+     <%= @project_name_camel_case %>.Errors.context(%{user_email: "johndoe@example.com"})
      ```
 
   """
@@ -30,10 +30,10 @@ defmodule <%= @project_name_camel_case %>.ErrorReporting do
   ## Examples
 
       # Notify with Context
-      <%= @project_name_camel_case %>.ErrorReporting.notify(error, %{user_email: "johndoe@example.com"})
+      <%= @project_name_camel_case %>.Errors.notify(error, %{user_email: "johndoe@example.com"})
 
       # Notify with default context
-      <%= @project_name_camel_case %>.ErrorReporting.notify(error)
+      <%= @project_name_camel_case %>.Errors.notify(error)
 
   """
   def notify(error, context \\ %{}) do
@@ -50,10 +50,10 @@ defmodule <%= @project_name_camel_case %>.ErrorReporting do
   ## Examples
 
       # Setting current user
-      <%= @project_name_camel_case %>.ErrorReporting.context(%{user_email: current_user})
+      <%= @project_name_camel_case %>.Errors.context(%{user_email: current_user})
 
       # Setting error info
-      <%= @project_name_camel_case %>.ErrorReporting.context(%{api_error: inspect(error)})
+      <%= @project_name_camel_case %>.Errors.context(%{api_error: inspect(error)})
 
   """
   def context(context) do
