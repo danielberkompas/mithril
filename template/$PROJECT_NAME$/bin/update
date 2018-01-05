@@ -8,5 +8,8 @@
 git pull || { echo 'Could not pull from origin.'; exit 1; }
 mix deps.get || { echo 'Could not update dependencies.'; exit 1; }
 mix compile || { echo 'Could not compile app.'; exit 1; }
+<%= if assigns[:ecto] do %>
+mix ecto.migrate || { echo 'Migrations failed!'; exit 1; }
+<% end %>
 
 echo "Update complete!"
