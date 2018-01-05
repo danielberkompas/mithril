@@ -2,3 +2,5 @@
 /.elixir_ls
 /_build
 /kitchen_sink
+/deps
+/doc

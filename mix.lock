@@ -1,0 +1,6 @@
+%{
+  "earmark": {:hex, :earmark, "1.2.4", "99b637c62a4d65a20a9fb674b8cffb8baa771c04605a80c911c4418c69b75439", [:mix], [], "hexpm"},
+  "ex_doc": {:hex, :ex_doc, "0.18.1", "37c69d2ef62f24928c1f4fdc7c724ea04aecfdf500c4329185f8e3649c915baf", [:mix], [{:earmark, "~> 1.1", [hex: :earmark, repo: "hexpm", optional: false]}], "hexpm"},
+  "mix_templates": {:hex, :mix_templates, "0.2.1", "b712ce4a29c0ce4cb36e9b3ef9f9ab473dee18d4aff23c120cc974f8df3a7c4f", [:mix], [{:private, "> 0.0.0", [hex: :private, repo: "hexpm", optional: false]}], "hexpm"},
+  "private": {:hex, :private, "0.1.1", "6227bd343bebd843e62d7bc4dba8fe970aeb0f567a33cf4249b93ef6319fa90f", [:mix], [], "hexpm"},
+}
