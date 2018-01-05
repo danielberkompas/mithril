@@ -17,7 +17,7 @@ Mithril is not a framework. It has two parts:
    documentation. None of these conventions are new to the Elixir community.
    Mithril simply explains existing tools and demonstrates best practices.
 
-## Technologies Supported
+## Libraries Supported
 
 Other than Elixir, Mithril does not dictate your technology choices.
 However, the project generator can generate projects with support for
