@@ -62,7 +62,7 @@ defmodule Mithril do
     ]
 
   def clean_up(context) do
-    if context[:elixir_version] =~ "1.6" do
+    if Version.match?(context[:elixir_version], "~> 1.6") do
       IO.puts("Running code formatter...")
       System.cmd("mix", ["format"], cd: context[:target_subdir])
     end
