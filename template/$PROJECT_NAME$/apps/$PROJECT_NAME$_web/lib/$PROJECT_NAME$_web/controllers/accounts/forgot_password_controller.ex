@@ -15,7 +15,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.ForgotPasswordController d
     Accounts.recover(email)
 
     conn
-    |> put_flash(:success, "Password reset instructions sent! (If #{email} is a real account)")
+    |> put_flash(:success, Messages.password_reset(email))
     |> redirect(to: Routes.page_path(conn, :index))
   end
 end

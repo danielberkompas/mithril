@@ -10,21 +10,24 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.ResetPasswordController do
 
   plug :validate_token
 
+  action_fallback <%= @project_name_camel_case %>Web.FallbackController
+
   def new(conn, _params) do
-    {:ok, changeset} = Accounts.change_user()
-    render conn, "new.html", changeset: changeset
+    with {:ok, changeset} <- Accounts.change_user() do
+      render conn, "new.html", changeset: changeset
+    end
   end
 
   def create(conn, %{"token" => token, "user" => params}) do
     case Accounts.update_user(%Token{token: token}, params) do
       {:ok, _user} ->
         conn
-        |> put_flash(:success, "Password changed successfully! Now log in.")
+        |> put_flash(:success, Messages.user_password_changed())
         |> redirect(to: Routes.session_path(conn, :new))
       {:error, %Ecto.Changeset{} = changeset} ->
         conn
         |> put_status(400)
-        |> put_flash(:error, "Password could not be changed!")
+        |> put_flash(:error, Messages.user_password_not_changed())
         |> render("new.html", changeset: changeset)
       _error ->
         invalid_token(conn)
@@ -42,7 +45,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.ResetPasswordController do
 
   defp invalid_token(conn) do
     conn
-    |> put_flash(:error, "That password reset link has expired.")
+    |> put_flash(:error, Messages.password_reset_link_expired())
     |> redirect(to: Routes.page_path(conn, :index))
     |> halt()
   end

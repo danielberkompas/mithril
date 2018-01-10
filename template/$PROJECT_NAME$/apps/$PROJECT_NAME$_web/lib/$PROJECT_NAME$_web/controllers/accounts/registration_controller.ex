@@ -8,9 +8,12 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationController do
 
   plug :scrub_params, "user" when action in [:create, :update]
 
+  action_fallback <%= @project_name_camel_case %>Web.FallbackController
+
   def new(conn, _params) do
-    {:ok, changeset} = Accounts.change_user()
-    render conn, "new.html", changeset: changeset
+    with {:ok, changeset} <- Accounts.change_user() do
+      render conn, "new.html", changeset: changeset
+    end
   end
 
   def create(conn, %{"user" => params}) do
@@ -19,20 +22,23 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationController do
     do
       conn
       |> Session.put_token(token)
-      |> put_flash(:success, "Your account has been created!")
+      |> put_flash(:success, Messages.user_created())
       |> redirect(to: Routes.page_path(conn, :index))
     else
       {:error, changeset} ->
         conn
         |> put_status(400)
-        |> put_flash(:error, "Could not register! See the errors below.")
+        |> put_flash(:error, Messages.user_not_created())
         |> render("new.html", changeset: changeset)
+      error ->
+        error
     end
   end
 
   def edit(conn, _params) do
-    {:ok, changeset} = Accounts.change_user(conn.assigns.token)
-    render conn, "edit.html", changeset: changeset
+    with {:ok, changeset} <- Accounts.change_user(conn.assigns.token) do
+      render conn, "edit.html", changeset: changeset
+    end
   end
 
   def update(conn, %{"user" => params}) do
@@ -40,18 +46,18 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationController do
          {:ok, changeset} <- Accounts.change_user(user)
     do
       conn
-      |> put_flash(:success, "Account updated!")
+      |> put_flash(:success, Messages.user_changed())
       |> render("edit.html", changeset: changeset)
     else
       {:error, :user, changeset, _changes} ->
         conn
-        |> put_flash(:error, "Changes could not be saved. See errors below.")
+        |> put_flash(:error, Messages.record_not_changed(changeset))
         |> render("edit.html", changeset: changeset)
       _error ->
         {:ok, changeset} = Accounts.change_user(conn.assigns.token)
 
         conn
-        |> put_flash(:error, "Changes could not be saved. Try again?")
+        |> put_flash(:error, Messages.record_not_changed())
         |> render("edit.html", changeset: changeset)
     end
   end

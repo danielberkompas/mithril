@@ -8,8 +8,11 @@ defmodule <%= @project_name_camel_case %>API.Factories.Mutation do
     mutation create_user($input: CreateUserInput!) {
       create_user(input: $input) {
         errors {
-          key
-          message
+          field
+          errors {
+            type
+            message
+          }
         }
         user {
           email
@@ -33,8 +36,11 @@ defmodule <%= @project_name_camel_case %>API.Factories.Mutation do
     mutation update_current_user($input: UpdateUserInput!) {
       update_current_user(input: $input) {
         errors {
-          key
-          message
+          field
+          errors {
+            type
+            message
+          }
         }
         user {
           email

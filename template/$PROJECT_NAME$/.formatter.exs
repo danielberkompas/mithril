@@ -23,6 +23,7 @@
     <% end %>
 
     # Phoenix
+    action_fallback: 1,
     plug: 2,
     plug: 1,
     pipe_through: 1,
