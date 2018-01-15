@@ -8,12 +8,22 @@ defmodule <%= @project_name_camel_case %>Web.Router do
   <% end %>
   <%= if assigns[:html] || assigns[:email] do %>
 
+  # This is your site's content security policy. Read more here:
+  # https://www.w3.org/TR/CSP2/
+  @csp [
+    "default-src 'self'",
+    "script-src 'self'",
+    "style-src 'self' 'unsafe-inline'",
+    "form-action 'self'",
+    "default-src 'self'"
+  ] |> Enum.join(";")
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
     plug :protect_from_forgery
-    plug :put_secure_browser_headers
+    plug :put_secure_browser_headers, %{"content-security-policy" => @csp}
     <%= if assigns[:accounts] && assigns[:html] do %>
     plug :load_token
     <% end %>
