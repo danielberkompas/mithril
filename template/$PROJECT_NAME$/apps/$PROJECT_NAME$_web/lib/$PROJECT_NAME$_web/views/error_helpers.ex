@@ -6,7 +6,6 @@ defmodule <%= @project_name_camel_case %>Web.ErrorHelpers do
 
   use Phoenix.HTML
 
-  <%= if assigns[:gettext] do %>
   @doc """
   Generates tag for inlined form input errors.
   """
@@ -16,6 +15,7 @@ defmodule <%= @project_name_camel_case %>Web.ErrorHelpers do
     end)
   end
 
+  <%= if assigns[:gettext] do %>
   @doc """
   Translates an error message using gettext.
   """
@@ -45,11 +45,11 @@ defmodule <%= @project_name_camel_case %>Web.ErrorHelpers do
   end
   <% else %>
   @doc """
-  Generates tag for inlined form input errors.
+  Interpolates an error message using String.replace/3
   """
-  def error_tag(form, field) do
-    Enum.map(Keyword.get_values(form.errors, field), fn ({msg, _opts}) ->
-      content_tag :span, msg, class: "help-block"
+  def translate_error({msg, opts}) do
+    Enum.reduce(opts, msg, fn {key, value}, acc ->
+      String.replace(acc, "%{#{key}}", to_string(value))
     end)
   end
   <% end %>
