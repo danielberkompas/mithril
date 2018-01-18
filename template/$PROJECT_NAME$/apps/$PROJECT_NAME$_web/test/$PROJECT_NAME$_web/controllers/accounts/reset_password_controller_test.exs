@@ -68,19 +68,36 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.ResetPasswordControllerTes
 
     test "validates password confirmation", %{conn: conn, token: token} do
       params = %{
-        "token" => token, 
+        "token" => token,
         "user" => %{
           "password" => "password",
           "password_confirmation" => "mismatch"
         }
       }
 
-      response = 
+      response =
         conn
         |> post(Routes.reset_password_path(conn, :create), params)
         |> html_response(400)
 
       assert response =~ "does not match confirmation"
+    end
+
+    test "validates password min length", %{conn: conn, token: token} do
+      params = %{
+        "token" => token,
+        "user" => %{
+          "password" => "pass",
+          "password_confirmation" => "pass"
+        }
+      }
+
+      response =
+        conn
+        |> post(Routes.reset_password_path(conn, :create), params)
+        |> html_response(400)
+
+      assert response =~ "should be at least 8 character(s)"
     end
   end
 

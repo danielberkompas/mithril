@@ -28,7 +28,7 @@ defmodule <%= @project_name_camel_case %>.Accounts.User do
 
   **Do not** create Ecto associations between this schema and schemas in other
   domains. This preserves the separation of the domains and enforces that
-  all queries be made through a public domain function. 
+  all queries be made through a public domain function.
   """
 
   use Ecto.Schema
@@ -60,12 +60,14 @@ defmodule <%= @project_name_camel_case %>.Accounts.User do
 
   defp validate_password(%{data: %{id: id}} = changeset) when id != nil do
     changeset
+    |> validate_length(:password, min: 8)
     |> validate_confirmation(:password)
   end
 
   defp validate_password(changeset) do
     changeset
     |> validate_required([:password, :password_confirmation])
+    |> validate_length(:password, min: 8)
     |> validate_confirmation(:password)
   end
 
