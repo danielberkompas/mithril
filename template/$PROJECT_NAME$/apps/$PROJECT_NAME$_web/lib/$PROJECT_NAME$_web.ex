@@ -45,6 +45,7 @@ defmodule <%= @project_name_camel_case %>Web do
       import <%= @project_name_camel_case %>Web.ErrorHelpers
       <%= if assigns[:gettext] do %>import <%= @project_name_camel_case %>Web.Gettext<% end %>
       alias <%= @project_name_camel_case %>Web.Router.Helpers, as: Routes
+      alias <%= @project_name_camel_case %>Web.Messages
     end
   end
   <% end %>
