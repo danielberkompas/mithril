@@ -13,21 +13,8 @@ defmodule <%= @project_name_camel_case %>API.Middleware.HandleErrors do
         Domain.get_item(id)
       end
   """
+
   @behaviour Absinthe.Middleware
-  <%= if assigns[:accounts] do %>
-
-  defp handle_error(reason) when reason in ~w(invalid_email invalid_password)a do
-    {:error, "invalid email or password"}
-  end
-
-  defp handle_error(:invalid_token) do
-    {:error, "authorization token is invalid or has expired"}
-  end
-
-  defp handle_error(:not_found) do
-    {:error, "record not found"}
-  end
-  <% end %>
   <%= if assigns[:ecto] do %>
 
   defp handle_error(%{__struct__: Ecto.Changeset} = changeset) do
@@ -41,21 +28,30 @@ defmodule <%= @project_name_camel_case %>API.Middleware.HandleErrors do
   <%= if assigns[:ecto] do %>
 
   defp transform_errors(%{__struct__: Ecto.Changeset} = changeset) do
-    changeset
-    |> changeset.__struct__.traverse_errors(&format_error/1)
-    |> Enum.map(fn
-         {key, value} ->
-           %{key: key, message: value}
-       end)
+    for {field, errors} <- Ecto.Changeset.traverse_errors(changeset, &format_error/1) do
+      %{
+        field: field,
+        errors: for {message, opts} <- errors do
+          %{
+            type: opts[:validation] || :unique,
+            message: message,
+          }
+        end
+      }
+    end
   end
 
   defp format_error({msg, opts}) do
-    Enum.reduce opts, msg, fn {key, value}, acc ->
-      String.replace(acc, "%{#{key}}", to_string(value))
-    end
-  end
+    msg =
+      Enum.reduce(opts, msg, fn {key, value}, acc ->
+        String.replace(acc, "%{#{key}}", to_string(value))
+      end)
+
+    {msg, opts}
+  end  
   <% end %>
 
+  @impl Absinthe.Middleware
   def call(%{errors: errors} = resolution, _opts) do
     results =
       errors

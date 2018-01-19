@@ -38,6 +38,6 @@ defmodule <%= @project_name_camel_case %>API.DataCase do
   @spec assert_invalid_token(Absinthe.run_result()) :: no_return
   def assert_invalid_token({:ok, %{data: data, errors: [error | _]}}) do
     assert Enum.all?(data, fn {_key, val} -> is_nil(val) end)
-    assert error[:message] =~ "token is invalid"
+    assert error[:message] =~ "invalid_token"
   end
 end

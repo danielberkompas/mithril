@@ -45,22 +45,36 @@ put_flash(conn, :error, gettext("Record not found!"))
 put_flash(conn, :error, gettext("not_found"))
 ```
 
-If you find yourself reusing the same or similar strings, then extract those
-parts to a shared module or [fallback controller](https://hexdocs.pm/phoenix/1.3.0/Phoenix.Controller.html#action_fallback/1).
+## Reusing Messages
+
+Mithril generates a `MyAppWeb.Messages` module to make it easy to reuse
+common messages as functions.
 
 ```elixir
-defmodule MyAppWeb.ErrorMessages do
+defmodule MyAppWeb.Messages do
   import MyAppWeb.Gettext
 
   def not_found do
     gettext("Record not found!")
   end
 end
+```
 
-# Usage
-import MyAppWeb.ErrorMessages
+If you need variables in your message, pass them as arguments:
 
-put_flash(conn, :error, not_found())
+```elixir
+def password_reset(email) do
+  dgettext("accounts", "Password reset instructions sent! (If %{email} is a real account)", email: email)
+end
+```
+
+You can then easily use those messages anywhere in the `my_app_web` app.
+(It's automatically aliased in all your controllers and views)
+
+```elixir
+alias MyAppWeb.Messages
+
+put_flash(conn, :error, Messages.not_found())
 ```
 
 ## Software to Recommend

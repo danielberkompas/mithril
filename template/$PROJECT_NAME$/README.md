@@ -23,8 +23,7 @@ TODO: Briefly describe what <%= @project_name_camel_case %> does
   <dt>bin/update</dt>
   <dd>
     Bash script which <code>git pull</code>s, updates dependencies, runs 
-    migrations, etc. It makes it easy for a mobile developer to pull down and 
-    update everything.
+    migrations, etc. It makes it easy to pull down and update everything.
   </dd>
   <dt>bin/reset</dt>
   <dd>
@@ -39,7 +38,9 @@ TODO: Briefly describe what <%= @project_name_camel_case %> does
 
 ## Architecture
 
-<%= @project_name_camel_case %> uses the Mithril code organization conventions.
+<%= @project_name_camel_case %> uses the
+[Mithril](https://github.com/infinitered/mithril) code organization
+conventions.
 
 - `apps/<%= @project_name %>` contains the business logic for the application.
   See its README and docs for details on its public API.

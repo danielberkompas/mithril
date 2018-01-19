@@ -41,7 +41,9 @@ defmodule <%= @project_name_camel_case %>API.Accounts.MutationTest do
           }
         )
 
-      assert errors == [%{"key" => "email", "message" => "has already been taken"}]
+      assert errors == [
+        %{"field" => "email", "errors" => [%{"type" => "unique", "message" => "has already been taken"}]}
+      ]
     end
   end
 
@@ -75,7 +77,7 @@ defmodule <%= @project_name_camel_case %>API.Accounts.MutationTest do
           }
         )
 
-      assert error[:message] =~ "invalid email or password"
+      assert error[:message] =~ "invalid_email"
     end
   end
 
@@ -144,8 +146,8 @@ defmodule <%= @project_name_camel_case %>API.Accounts.MutationTest do
         )
 
       expected = [
-        %{"key" => "email", "message" => "can't be blank"},
-        %{"key" => "password_confirmation", "message" => "does not match confirmation"}
+        %{"field" => "email", "errors" => [%{"type" => "required", "message" => "can't be blank"}]},
+        %{"field" => "password_confirmation", "errors" => [%{"type" => "confirmation", "message" => "does not match confirmation"}]}
       ]
 
       assert errors == expected
