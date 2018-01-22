@@ -7,9 +7,7 @@ defmodule Mithril.Mixfile do
   @maintainers ["Daniel Berkompas <daniel@infinite.red>"]
   @github "https://github.com/infinitered/#{@name}"
 
-  @description """
-  Generates a simple umbrella app structure with convenient setup scripts.
-  """
+  @description "An architecture in a box for a back-end webserver."
 
   def project do
     in_production = Mix.env() == :prod
@@ -21,7 +19,7 @@ defmodule Mithril.Mixfile do
       version: @version,
       deps: deps(),
       docs: docs(),
-      elixir: "~> 1.4",
+      elixir: "~> 1.5",
       package: package(),
       description: @description,
       build_embedded: in_production,
@@ -32,7 +30,7 @@ defmodule Mithril.Mixfile do
   defp package do
     [
       name: @name,
-      files: ["lib", "mix.exs", "README.md", "LICENSE.md", "template"],
+      files: ["lib", "mix.exs", "README.md", "LICENSE", "template"],
       maintainers: @maintainers,
       licenses: ["MIT"],
       links: %{

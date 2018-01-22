@@ -17,6 +17,8 @@ Mithril is not a framework. It has two parts:
    documentation. None of these conventions are new to the Elixir community.
    Mithril simply explains existing tools and demonstrates best practices.
 
+See [the documentation](https://hexdocs.pm/mithril) for details.
+
 ## Libraries Supported
 
 Other than Elixir, Mithril does not dictate your technology choices.
@@ -32,25 +34,21 @@ any of the libraries listed below.
 
 ## Install
 
-Mithril works best with a pre-release version of Elixir: `1.6.0-rc.0`.
-
-You can install it using [kiex](https://github.com/taylor/kiex) like so:
-
-```sh
-$ kiex install 1.6.0-rc.0 # Install Elixir 1.6.0 from Elixir's master branch
-$ kiex default 1.6.0-rc.0 # use Elixir 1.6 by default on command line
-$ kiex use 1.6.0-rc.0     # use Elixir 1.6 in this terminal session
-$ mix local.hex --force   # Install hex, the package manager
-```
-
-You can then install Mithril:
+Mithril works best with Elixir 1.6. You can install Mithril like so:
 
 ```sh
 $ mix archive.install hex mix_generator
 $ mix archive.install hex mix_templates
-$ git clone git@github.com:infinitered/mithril.git
-$ mix template.install mithril
+$ mix template.install hex mithril
 ```
+
+You can then generate your project:
+
+```sh
+$ mix gen mithril my_app [options]
+```
+
+See [the documentation](https://hexdocs.pm/mithril) for details on available options.
 
 ## Premium Support
 
