@@ -9,7 +9,6 @@ defmodule <%= @project_name_camel_case %>.Accounts.User do
         email: "my@email.com",
         encrypted_password: "$2b$12$8kkvCB7/Nt8NxvsMeEthRuNetesDBqde27Nk3t6n3wQvJiXXDxDRi",
         password: nil,             # virtual
-        password_confirmation: nil # virtual
         inserted_at: #{inspect(DateTime.utc_now())},
         updated_at: #{inspect(DateTime.utc_now())}
       }
@@ -31,10 +30,7 @@ defmodule <%= @project_name_camel_case %>.Accounts.User do
   all queries be made through a public domain function.
   """
 
-  use Ecto.Schema
-  import Ecto.Changeset
-
-  alias Comeonin.Bcrypt
+  use <%= @project_name_camel_case %>.Schema
 
   schema "users" do
     field :email, :string
@@ -51,35 +47,18 @@ defmodule <%= @project_name_camel_case %>.Accounts.User do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:email, :password, :password_confirmation])
-    |> validate_required([:email])
+    |> require_fields()
     |> unique_constraint(:email)
     |> validate_format(:email, ~r/^[A-Z0-9'._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "invalid email address")
-    |> validate_password()
-    |> encrypt_password()
+    |> validate_secure_password(:password)
+    |> put_encrypted_password(:password, :encrypted_password)
   end
 
-  defp validate_password(%{data: %{id: id}} = changeset) when id != nil do
-    changeset
-    |> validate_length(:password, min: 8)
-    |> validate_confirmation(:password)
+  defp require_fields(%{data: %{id: nil}} = changeset) do
+    validate_required(changeset, [:email, :password, :password_confirmation])
   end
 
-  defp validate_password(changeset) do
-    changeset
-    |> validate_required([:password, :password_confirmation])
-    |> validate_length(:password, min: 8)
-    |> validate_confirmation(:password)
-  end
-
-  defp encrypt_password(changeset) do
-    password = get_change(changeset, :password)
-
-    if password && !changeset.errors[:password_confirmation] do
-      changeset
-      |> put_change(:encrypted_password, Bcrypt.hashpwsalt(password))
-      |> delete_change(:password_confirmation)
-    else
-      changeset
-    end
+  defp require_fields(changeset) do
+    validate_required(changeset, [:email])
   end
 end

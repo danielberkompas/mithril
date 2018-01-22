@@ -3,7 +3,7 @@ defmodule <%= @project_name_camel_case %>.Accounts do
   Provides user registration, auth tokens, and account recovery.
   """
 
-  use Authority.Template,
+  use Authority.Ecto.Template,
     behaviours: [
       Authority.Authentication,
       Authority.Recovery,

@@ -23,7 +23,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.SessionControllerTest do
       params = %{
         "user" => %{
           "email" => "test@example.com",
-          "password" => "password"
+          "password" => "p@$$w0rd"
         }
       }
 
@@ -36,7 +36,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.SessionControllerTest do
       params = %{
         "user" => %{
           "email" => "nonexistent@email.com",
-          "password" => "password"
+          "password" => "p@$$w0rd"
         }
       }
 
@@ -64,8 +64,8 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.SessionControllerTest do
     {:ok, user} =
       Accounts.create_user(%{
         email: "test@example.com",
-        password: "password",
-        password_confirmation: "password"
+        password: "p@$$w0rd",
+        password_confirmation: "p@$$w0rd"
       })
 
     {:ok, [user: user]}

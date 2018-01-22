@@ -13,18 +13,21 @@ defmodule <%= @project_name_camel_case %>.Accounts.Token do
       }
   """
 
-  use Ecto.Schema
-  import Ecto.Changeset
+  use <%= @project_name_camel_case %>.Schema
 
   defmodule Purpose do
     use Exnumerator, values: [:any, :recovery]
+  end
+
+  defmodule HMAC do
+    use Authority.Ecto.HMAC, secret: {:app_env, :<%= @project_name %>, :token_secret}
   end
 
   schema "user_tokens" do
     belongs_to :user, <%= @project_name_camel_case %>.Accounts.User
 
     field :purpose, Purpose
-    field :token, :string
+    field :token, HMAC
     field :expires_at, :utc_datetime
     field :last_used_at, :utc_datetime
 
@@ -35,32 +38,9 @@ defmodule <%= @project_name_camel_case %>.Accounts.Token do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:purpose, :expires_at, :last_used_at])
-    |> put_token()
-    |> put_expires_at()
+    |> put_token(:token)
+    |> put_token_expiration(:expires_at, :purpose, recovery: {24, :hours}, any: {14, :days})
     |> put_last_used_at()
-  end
-
-  defp put_token(changeset) do
-    token =
-      32
-      |> :crypto.strong_rand_bytes()
-      |> Base.encode64()
-
-    put_change(changeset, :token, token)
-  end
-
-  defp put_expires_at(changeset) do
-    if get_change(changeset, :expires_at) do
-      changeset
-    else
-      expires_at =
-        DateTime.utc_now()
-        |> DateTime.to_unix()
-        |> Kernel.+(60 * 60 * 24 * 14) # Add 2 weeks
-        |> DateTime.from_unix!()
-
-      put_change(changeset, :expires_at, expires_at)
-    end
   end
 
   defp put_last_used_at(changeset) do

@@ -16,9 +16,10 @@ config :<%= @project_name %>, <%= @project_name_camel_case %>.Notifications.Emai
 <% end %>
 
 <%= if assigns[:accounts] do %>
-# Configure reset password URL
+# Configure authentication-related settings
 config :<%= @project_name %>,
-  reset_password_url: "http://localhost:4000/reset-password"
+  reset_password_url: "http://localhost:4000/reset-password",
+  token_secret: "<%= 32 |> :crypto.strong_rand_bytes() |> Base.encode64() %>"
 <% end %>
 
 <%= if assigns[:error_reporting] == "honeybadger" do %>

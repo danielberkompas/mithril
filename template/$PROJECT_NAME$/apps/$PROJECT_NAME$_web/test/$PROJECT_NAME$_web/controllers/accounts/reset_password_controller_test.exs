@@ -70,7 +70,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.ResetPasswordControllerTes
       params = %{
         "token" => token,
         "user" => %{
-          "password" => "password",
+          "password" => "p@$$w0rd",
           "password_confirmation" => "mismatch"
         }
       }
