@@ -1,23 +1,11 @@
 # Installation
 
-Mithril works best with a pre-release version of Elixir: `1.6.0-dev`.
-
-You can install it using [kiex](https://github.com/taylor/kiex) like so:
-
-```sh
-$ kiex install master # Install Elixir 1.6.0 from Elixir's master branch
-$ kiex default master # use Elixir 1.6 by default on command line
-$ kiex use master     # use Elixir 1.6 in this terminal session
-$ mix local.hex --force # Install hex, the package manager
-```
-
-You can then install Mithril:
+Mithril works best with Elixir 1.6. You can install Mithril like so:
 
 ```sh
 $ mix archive.install hex mix_generator
 $ mix archive.install hex mix_templates
-$ git clone git@github.com:infinitered/mithril.git
-$ mix template.install mithril
+$ mix template.install hex mithril
 ```
 
 ## Updating Mithril
