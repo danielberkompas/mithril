@@ -25,8 +25,8 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationControllerTest
       params = %{
         "user" => %{
           "email" => "test@email.com",
-          "password" => "password",
-          "password_confirmation" => "password"
+          "password" => "p@$$w0rd",
+          "password_confirmation" => "p@$$w0rd"
         }
       }
 
@@ -42,7 +42,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationControllerTest
       params = %{
         "user" => %{
           "email" => "",
-          "password" => "password",
+          "password" => "p@$$w0rd",
           "password_confirmation" => "mismatch"
         }
       }

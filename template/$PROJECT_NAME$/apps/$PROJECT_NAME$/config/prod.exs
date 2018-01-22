@@ -15,10 +15,12 @@ config :<%= @project_name %>, <%= @project_name_camel_case %>.Repo,
 <% end %>
 
 <%= if assigns[:accounts] do %>
-# Configure reset password URL
-# TODO: Update this to reflect your production DNS domain
+# Configure authentication-related settings
 config :<%= @project_name %>,
-  reset_password_url: "http://example.com/reset-password"
+  # TODO: Update this to reflect your production DNS domain
+  reset_password_url: "http://example.com/reset-password",
+  # TODO: Set this environment variable on your production environment
+  token_secret: {:system, "TOKEN_SECRET"}
 <% end %>
 
 <%= if assigns[:error_reporting] == "honeybadger" do %>

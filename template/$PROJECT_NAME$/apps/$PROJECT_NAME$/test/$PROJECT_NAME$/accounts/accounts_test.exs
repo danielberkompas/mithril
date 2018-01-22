@@ -16,8 +16,8 @@ defmodule <%= @project_name_camel_case %>.AccountsTest do
 
   @valid_user_params %{
     email: "test@example.com",
-    password: "password",
-    password_confirmation: "password"
+    password: "p@$$w0rd",
+    password_confirmation: "p@$$w0rd"
   }
 
   describe ".create_user/1" do
@@ -52,11 +52,11 @@ defmodule <%= @project_name_camel_case %>.AccountsTest do
     setup [:create_user]
 
     test "returns a login token if credentials are valid" do
-      assert {:ok, %Token{}} = Accounts.tokenize({"test@example.com", "password"})
+      assert {:ok, %Token{}} = Accounts.tokenize({"test@example.com", "p@$$w0rd"})
     end
 
     test "returns error if credentials are invalid" do
-      assert {:error, :invalid_email} = Accounts.tokenize({"invalid@email.com", "password"})
+      assert {:error, :invalid_email} = Accounts.tokenize({"invalid@email.com", "p@$$w0rd"})
     end
   end
 

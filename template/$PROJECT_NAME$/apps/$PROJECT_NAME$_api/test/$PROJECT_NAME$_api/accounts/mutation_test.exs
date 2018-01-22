@@ -17,8 +17,8 @@ defmodule <%= @project_name_camel_case %>API.Accounts.MutationTest do
           variables: %{
             "input" => %{
               "email" => "new@example.com",
-              "password" => "password",
-              "password_confirmation" => "password"
+              "password" => "p@$$w0rd",
+              "password_confirmation" => "p@$$w0rd"
             }
           }
         )
@@ -35,8 +35,8 @@ defmodule <%= @project_name_camel_case %>API.Accounts.MutationTest do
           variables: %{
             "input" => %{
               "email" => user.email,
-              "password" => "password",
-              "password_confirmation" => "password"
+              "password" => "p@$$w0rd",
+              "password_confirmation" => "p@$$w0rd"
             }
           }
         )
@@ -57,7 +57,7 @@ defmodule <%= @project_name_camel_case %>API.Accounts.MutationTest do
           variables: %{
             "input" => %{
               "email" => user.email,
-              "password" => "password"
+              "password" => "p@$$w0rd"
             }
           }
         )

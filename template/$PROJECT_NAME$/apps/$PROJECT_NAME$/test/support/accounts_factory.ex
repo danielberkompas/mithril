@@ -39,8 +39,8 @@ defmodule <%= @project_name_camel_case %>.AccountsFactory do
     {:ok, user} =
       Accounts.create_user(%{
         email: "test@example.com",
-        password: "password",
-        password_confirmation: "password"
+        password: "p@$$w0rd",
+        password_confirmation: "p@$$w0rd"
       })
 
     {:ok, [user: user]}
@@ -53,7 +53,7 @@ defmodule <%= @project_name_camel_case %>.AccountsFactory do
   """
   @spec create_token(Keyword.t) :: {:ok, [token: Accounts.user_token]}
   def create_token(context) do
-    {:ok, token} = Accounts.tokenize({context[:user].email, "password"})
+    {:ok, token} = Accounts.tokenize({context[:user].email, "p@$$w0rd"})
     {:ok, [token: token]}
   end
 
