@@ -1,7 +1,7 @@
 # Mithril
 [![Build Status](https://semaphoreci.com/api/v1/projects/39401688-bc0e-4d65-85b0-075dd293d2c7/1625736/badge.svg)](https://semaphoreci.com/ir/mithril)
 
-> An Elixir architecture-in-a-box for a backend server.
+> An Elixir architecture-in-a-box for a backend server. Supports GraphQL, Authority authentication, and more.
 
 Mithril provides a foundation for a long-lived, maintainable, and highly
 scalable backend server. It uses Elixir for reliability and scalability, and
