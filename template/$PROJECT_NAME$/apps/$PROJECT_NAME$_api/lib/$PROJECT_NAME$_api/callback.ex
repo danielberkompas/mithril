@@ -18,6 +18,6 @@ defmodule <%= @project_name_camel_case %>API.Callback do
 
   @doc false
   def pubsub do
-    Application.get_env(:<%= @project_name_camel_case %>_api, :pubsub)
+    Application.get_env(:<%= @project_name %>_api, :pubsub)
   end
 end

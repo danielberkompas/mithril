@@ -8,8 +8,8 @@ defmodule <%= @project_name_camel_case %>Web.Messages do
   <% end %>
 
   <%= if assigns[:accounts] do %>
-  @spec not_authorized :: String.t
-  def not_authorized do
+  @spec unauthorized :: String.t
+  def unauthorized do
     <%= if assigns[:gettext] do %>dgettext("errors", <% end %>"You must be logged in to view that page"<%= if assigns[:gettext] do %>)<% end %>
   end
 

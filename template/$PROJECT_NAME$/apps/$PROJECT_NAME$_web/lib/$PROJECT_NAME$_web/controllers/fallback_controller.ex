@@ -18,14 +18,14 @@ defmodule <%= @project_name_camel_case %>Web.FallbackController do
 
   def call(conn, {:error, error}) when error in ~w(invalid_token token_expired)a do
     conn
-    |> put_flash(:error, Messages.not_authorized())
+    |> put_flash(:error, Messages.unauthorized())
     |> Session.delete_token()
     |> redirect(to: Routes.page_path(conn, :index))
   end
 
-  def call(conn, {:error, :not_authorized}) do
+  def call(conn, {:error, :unauthorized}) do
     conn
-    |> put_flash(:error, Messages.not_authorized())
+    |> put_flash(:error, Messages.unauthorized())
     |> redirect(to: Routes.page_path(conn, :index))
   end
 

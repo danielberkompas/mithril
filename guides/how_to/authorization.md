@@ -112,7 +112,7 @@ to do this is to create a private `Authorization` module in your domain.
 defmodule MyApp.CMS.Authorization do
   def authorize(:create_page, user_id) do
     # Decide whether user can create the page or not,
-    # return :ok or {:error, :not_authorized}
+    # return :ok or {:error, :unauthorized}
   end
 end
 ```
