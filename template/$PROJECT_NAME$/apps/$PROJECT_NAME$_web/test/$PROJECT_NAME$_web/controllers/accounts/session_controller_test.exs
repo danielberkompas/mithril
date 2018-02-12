@@ -28,7 +28,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.SessionControllerTest do
       }
 
       conn = post(conn, Routes.session_path(conn, :create), params)
-      assert conn.assigns.token
+      assert conn.assigns[:current_user]
       assert redirected_to(conn) == Routes.page_path(conn, :index)
     end
 
@@ -42,7 +42,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.SessionControllerTest do
 
       conn = post(conn, Routes.session_path(conn, :create), params)
       assert get_flash(conn, :error)
-      refute conn.assigns[:token]
+      refute conn.assigns[:current_user]
       assert html_response(conn, 400) =~ "form"
     end
   end
@@ -54,7 +54,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.SessionControllerTest do
         |> assign(:token, "my-token")
         |> get(Routes.session_path(conn, :delete))
       
-      refute conn.assigns[:token]
+      refute conn.assigns[:current_user]
       assert get_flash(conn, :success)
       assert redirected_to(conn) == Routes.page_path(conn, :index)
     end

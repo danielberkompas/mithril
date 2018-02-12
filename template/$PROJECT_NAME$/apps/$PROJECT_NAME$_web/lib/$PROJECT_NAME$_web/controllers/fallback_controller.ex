@@ -7,7 +7,7 @@ defmodule <%= @project_name_camel_case %>Web.FallbackController do
   use <%= @project_name_camel_case %>Web, :controller
   <%= if assigns[:accounts] do %>
 
-  alias <%= @project_name_camel_case %>Web.Session
+  alias <%= @project_name_camel_case %>Web.Authenticator
 
   def call(conn, {:error, error}) when error in ~w(invalid_email invalid_password)a do
     conn
@@ -19,7 +19,7 @@ defmodule <%= @project_name_camel_case %>Web.FallbackController do
   def call(conn, {:error, error}) when error in ~w(invalid_token token_expired)a do
     conn
     |> put_flash(:error, Messages.unauthorized())
-    |> Session.delete_token()
+    |> Authenticator.sign_out()
     |> redirect(to: Routes.page_path(conn, :index))
   end
 

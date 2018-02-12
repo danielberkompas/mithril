@@ -4,7 +4,6 @@ defmodule <%= @project_name_camel_case %>Web.Router do
   use <%= @project_name_camel_case %>Web, :router
   <%= if assigns[:accounts] && assigns[:html] do %>
 
-  import <%= @project_name_camel_case%>Web.Session
   <% end %>
   <%= if assigns[:html] || assigns[:email] do %>
 
@@ -25,14 +24,14 @@ defmodule <%= @project_name_camel_case %>Web.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers, %{"content-security-policy" => @csp}
     <%= if assigns[:accounts] && assigns[:html] do %>
-    plug :load_token
+    plug Authenticator.Session, with: <%= @project_name_camel_case %>Web.Authenticator
     <% end %>
   end
   <% end %>
   <%= if assigns[:accounts] && assigns[:html] do %>
 
-  pipeline :authorize do
-    plug :require_token
+  pipeline :authenticated do
+    plug Authenticator.Authenticated, with: <%= @project_name_camel_case %>Web.Authenticator
   end
   <% end %>
   <%= if assigns[:api] do %>
@@ -83,7 +82,7 @@ defmodule <%= @project_name_camel_case %>Web.Router do
   end
 
   scope "/", <%= @project_name_camel_case %>Web.Accounts do
-    pipe_through [:browser, :authorize]
+    pipe_through [:browser, :authenticated]
 
     get "/account", RegistrationController, :edit
     put "/account", RegistrationController, :update

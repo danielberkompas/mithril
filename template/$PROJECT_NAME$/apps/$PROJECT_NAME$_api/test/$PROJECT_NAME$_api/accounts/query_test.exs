@@ -11,7 +11,7 @@ defmodule <%= @project_name_camel_case %>API.Accounts.QueryTest do
     setup [:create_user, :create_token]
 
     test "returns current user if logged in", %{user: user, token: token} do
-      {:ok, %{data: data}} = run(query(:current_user), context: %{token: token})
+      {:ok, %{data: data}} = run(query(:current_user), context: %{current_user: user, token: token})
       assert data["current_user"]["email"] == user.email
     end
 
