@@ -21,7 +21,7 @@ defmodule Mithril do
       asset_bundler: [takes: "webpack or brunch", default: "webpack"],
 
       # Tweaks configuration for a particular continuous integration provider
-      ci: [takes: "semaphore"],
+      ci: [takes: "semaphore or travis"],
 
       # How are you going to deploy the app?
       # Takes "heroku"

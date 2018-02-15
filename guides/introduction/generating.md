@@ -11,39 +11,47 @@ application. Use the options below to add functionality.
 
 ### Options
 
-- `--accounts`: Generates a token-based authentication domain. Requires 
-  the following options to be included to work properly: `--ecto`, 
+* `--accounts`: Generates a token-based authentication domain. Requires
+  the following options to be included to work properly: `--ecto`,
   `--email`. See their documentation below.
 
-- `--api [type]`: Generates an API app. Supported types:
-  - `graphql`: A GraphQL API using [Absinthe](https://absinthe-graphql.org)
+* `--api [type]`: Generates an API app. Supported types:
 
-- `--assets`: Generates the Phoenix app with an asset pipeline for javascript and css.
+  * `graphql`: A GraphQL API using [Absinthe](https://absinthe-graphql.org)
 
-- `--asset-bundler [bundler]` The asset bundler to use for the asset pipeline. Supported options:
-  - `brunch`
-  - `webpack`
+* `--assets`: Generates the Phoenix app with an asset pipeline for javascript and css.
 
-- `--ci [type]`: The CI server you intend to use. Supported options:
-  - `semaphore`: Generates configuration for [Semaphore](https://semaphoreci.com).
+* `--asset-bundler [bundler]` The asset bundler to use for the asset pipeline. Supported options:
 
-- `--deploy [host]`: The host you intend to serve your Mithril application from.
-  - `heroku`: Generates configuration for [Heroku](https://heroku.com)
+  * `brunch`
+  * `webpack`
 
-- `--ecto [adapter]`: Include Ecto for persistence. Supported adapters:
-  - `postgres`
+* `--ci [type]`: The CI server you intend to use. Supported options:
 
-- `--email`: Generate email notification domain using [Swoosh](https://github.com/swoosh/swoosh).
+  * `semaphore`: Generates configuration for [Semaphore](https://semaphoreci.com).
+  * `travis`: Generates configuration for [Travis](https://travis-ci.org/).
 
-- `--gettext`: Generates internationalization support using [Gettext](https://github.com/elixir-lang/gettext).
+* `--deploy [host]`: The host you intend to serve your Mithril application from.
 
-- `--html [template-lang]`: Generates HTML-related files in the Phoenix app, such as views, controllers, and templates.
+  * `heroku`: Generates configuration for [Heroku](https://heroku.com)
+
+* `--ecto [adapter]`: Include Ecto for persistence. Supported adapters:
+
+  * `postgres`
+
+* `--email`: Generate email notification domain using [Swoosh](https://github.com/swoosh/swoosh).
+
+* `--gettext`: Generates internationalization support using [Gettext](https://github.com/elixir-lang/gettext).
+
+* `--html [template-lang]`: Generates HTML-related files in the Phoenix app, such as views, controllers, and templates.
   Supported template languages:
-  - `eex`
-  - `slim` via [Slime](http://slime-lang.com/)
 
-- `--sass-syntax [syntax]`: The variant of [Sass](http://sass-lang.com) syntax to use if you have an asset pipeline. Supported options:
-  - `sass`
-  - `scss`
+  * `eex`
+  * `slim` via [Slime](http://slime-lang.com/)
 
-- `--websockets`: Generates needed files for websocket support in both the Phoenix and GraphQL API apps (if you have one).
+* `--sass-syntax [syntax]`: The variant of [Sass](http://sass-lang.com) syntax to use if you have an asset pipeline. Supported options:
+
+  * `sass`
+  * `scss`
+
+* `--websockets`: Generates needed files for websocket support in both the Phoenix and GraphQL API apps (if you have one).
