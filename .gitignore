@@ -2,6 +2,5 @@
 /.elixir_ls
 /_build
 /kitchen_sink
-/kitchen_sink_travis
 /deps
 /doc
