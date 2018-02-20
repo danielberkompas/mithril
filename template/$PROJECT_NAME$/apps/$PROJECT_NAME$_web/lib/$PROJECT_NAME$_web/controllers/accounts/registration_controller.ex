@@ -18,10 +18,8 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationController do
 
   def create(conn, %{"user" => params}) do
     with {:ok, user} <- Accounts.create_user(params),
-         {:ok, token} <- Accounts.tokenize({user.email, params["password"]})
-    do
+         {:ok, conn} <- Session.sign_in(conn, user) do
       conn
-      |> Session.put_token(token)
       |> put_flash(:success, Messages.user_created())
       |> redirect(to: Routes.page_path(conn, :index))
     else
@@ -36,13 +34,13 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationController do
   end
 
   def edit(conn, _params) do
-    with {:ok, changeset} <- Accounts.change_user(conn.assigns.token) do
+    with {:ok, changeset} <- Accounts.change_user(conn.assigns.current_user) do
       render conn, "edit.html", changeset: changeset
     end
   end
 
   def update(conn, %{"user" => params}) do
-    with {:ok, user} <- Accounts.update_user(conn.assigns.token, params),
+    with {:ok, user} <- Accounts.update_user(conn.assigns.current_user, params),
          {:ok, changeset} <- Accounts.change_user(user)
     do
       conn

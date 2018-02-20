@@ -48,20 +48,32 @@ defmodule <%= @project_name_camel_case %>Web.Mixfile do
   defp deps do
     [
       {:phoenix, ">= 1.3.0"},
-      {:phoenix_pubsub, "~> 1.0"},<%= if assigns[:ecto] do %>
-      {:phoenix_ecto, "~> 3.2"},<% end %><%= if assigns[:html] do %>
-      {:phoenix_html, "~> 2.10"},<% end %><%= if assigns[:html] == "slim" do %>
-      {:phoenix_slime, "~> 0.8.0"},<% end %>
-      {:phoenix_live_reload, "~> 1.0", only: :dev},<%= if assigns[:websockets] && assigns[:api] == "graphql" do %>
-      {:absinthe_phoenix, "~> 1.4.0"},<% end %><%= if assigns[:gettext] do %>
-      {:gettext, "~> 0.11"},<% end %>
+      {:phoenix_pubsub, "~> 1.0"},
+      <%= if assigns[:ecto] do %>
+      {:phoenix_ecto, "~> 3.2"},
+      <% end %>
+      <%= if assigns[:html] do %>
+      {:phoenix_html, "~> 2.10"},
+      <% end %>
+      <%= if assigns[:html] == "slim" do %>
+      {:phoenix_slime, "~> 0.8.0"},
+      <% end %>
+      {:phoenix_live_reload, "~> 1.0", only: :dev},
+      <%= if assigns[:websockets] && assigns[:api] == "graphql" do %>
+      {:absinthe_phoenix, "~> 1.4.0"},
+      <% end %>
+      <%= if assigns[:gettext] do %>
+      {:gettext, "~> 0.11"},
+      <% end %>
       {:<%= @project_name %>, in_umbrella: true},
       <%= if assigns[:api] do %>
       {:<%= @project_name %>_api, in_umbrella: true},
       <% end %>
-      {:cowboy, "~> 1.0"}<%= if assigns[:email] do %>,
+      {:cowboy, "~> 1.0"},
+      <%= if assigns[:email] do %>
       {:swoosh, "~> 0.11.0"} # For mailbox preview plug
-    <% end %>]
+      <% end %>
+    ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

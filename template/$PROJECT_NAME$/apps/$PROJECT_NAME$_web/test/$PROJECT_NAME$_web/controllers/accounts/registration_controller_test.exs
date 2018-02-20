@@ -32,8 +32,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationControllerTest
 
       conn = post(conn, Routes.registration_path(conn, :create), params)
 
-      assert conn.assigns.token
-      assert {:ok, _} = Accounts.authenticate(conn.assigns.token)
+      assert conn.assigns.current_user
       assert get_flash(conn, :success)
       assert redirected_to(conn) =~ Routes.page_path(conn, :index)
     end
@@ -66,10 +65,10 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationControllerTest
       end
     end
 
-    test "displays a form to edit the current user", %{conn: conn, user: user, token: token} do
+    test "displays a form to edit the current user", %{conn: conn, user: user} do
       response =
         conn
-        |> assign(:token, token)
+        |> assign(:current_user, user)
         |> get(Routes.registration_path(conn, :edit))
         |> html_response(200)
 
@@ -91,7 +90,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationControllerTest
       end
     end
 
-    test "updates a user's fields", %{conn: conn, token: token} do
+    test "updates a user's fields", %{conn: conn, user: user} do
       params = %{
         "user" => %{
           "email" => "new@email.com",
@@ -102,7 +101,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationControllerTest
 
       conn = 
         conn
-        |> assign(:token, token)
+        |> assign(:current_user, user)
         |> put(Routes.registration_path(conn, :update), params)
 
       assert get_flash(conn, :success)
@@ -113,7 +112,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationControllerTest
 
   defp assert_login_required(fun) do
     conn = fun.()
-    assert get_flash(conn, :error) =~ "log in"
+    assert get_flash(conn, :error) =~ "logged in"
     assert redirected_to(conn) == Routes.session_path(conn, :new)
   end
 end

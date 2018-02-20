@@ -20,8 +20,8 @@ defmodule <%= @project_name_camel_case %>API.Resolvers.Accounts do
   Resolver function returning the current user. Calls `<%= @project_name_camel_case %>.Accounts.authenticate/1`
   to identify the user.
   """
-  def current_user(_args, %{context: %{token: token}}) do
-    Accounts.authenticate(token)
+  def current_user(_args, %{context: %{current_user: user}}) do
+    {:ok, user}
   end
 
   def current_user(_args, _context) do
@@ -47,8 +47,9 @@ defmodule <%= @project_name_camel_case %>API.Resolvers.Accounts do
   Calls `<%= @project_name_camel_case %>.Accounts.tokenize/1`.
   """
   def login_user(%{input: params}, _context) do
-    with {:ok, token, user} <- Accounts.tokenize({params[:email], params[:password]}) do
-      {:ok, %{token: token, user: user}}
+    with {:ok, token} <- Accounts.tokenize({params[:email], params[:password]}),
+         {:ok, user} <- Accounts.authenticate(token) do
+      {:ok, %{token: token.token, user: user}}
     end
   end
 end

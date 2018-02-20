@@ -42,6 +42,11 @@ defmodule <%= @project_name_camel_case %>Web.Messages do
     <%= if assigns[:gettext] do %>dgettext("errors", <% end %>"Account updated!"<%= if assigns[:gettext] do %>)<% end %>
   end
 
+  @spec logged_in :: String.t
+  def logged_in do
+    <%= if assigns[:gettext] do %>dgettext("errors", <% end %>"Successfully logged in!"<%= if assigns[:gettext] do %>)<% end %>
+  end
+
   @spec logged_out :: String.t
   def logged_out do
     <%= if assigns[:gettext] do %>dgettext("errors", <% end %>"Successfully logged out!"<%= if assigns[:gettext] do %>)<% end %>

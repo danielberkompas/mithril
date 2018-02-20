@@ -21,8 +21,8 @@ app, with support for:
 - Login with email/password (creates unique, expiring tokens)
 - Forgot password
 
-It will also generate the necessary Phoenix controllers in your `my_app_web`
-OTP app for login and forgot password.
+It will also generate the necessary Phoenix controllers in `my_app_web`
+for login and forgot password.
 
 ## Authentication
 
@@ -35,73 +35,20 @@ Accounts.tokenize({"my@email.com", "password"})
 # => {:ok, %Accounts.Token{token: "uJHr9+dfj4fNj8cGk8EUCQ=="}}
 ```
 
-The client app is responsible to store this `token` and pass it in subsequent
-calls to domain functions.
+The client app is responsible to store this `token` in its session, and use
+it to identify the user _on each request_.
 
-- A **Phoenix** client will store the `token` in the **cookie session** (See
-  the generated `MyAppWeb.Session` module for how to do this)
-- A **GraphQL/REST** client might give the `token` to a mobile app to store
+- A **Phoenix** app will store the `token` in its **cookie session**. It will
+  populate `conn.assigns.current_user` by calling `Accounts.authenticate/2`
+  with the token.
 
-## Identifying Users in Other Domains
+- A **GraphQL/REST** app will give the `token` to its clients to store. It will
+  populate the `context.current_user` by calling `Accounts.authenticate/2`.
 
-Each domain function that needs to identify a user must take an
-`Accounts.Token` as one of its arguments.
-
-```elixir
-# only some users can create pages
-MyApp.CMS.create_page(token, params)
-```
-
-It must then convert that token to a user ID. The simplest way to do this is
-to just call `Accounts.authenticate` from your function.
-
-```elixir
-def create_page(token, params) do
-  with {:ok, %{user: %{id: user_id}}} <- Accounts.authenticate(token) do
-    # Create a page if the user_id is allowed to do so
-  end
-end
-```
-
-Or, you can isolate all the calls to `Accounts` into a protocol, named
-`Identity`.
-
-```elixir
-defprotocol MyApp.CMS.Identity do
-  @spec user_id(any) :: {:ok, user_id} | {:error, term}
-  def user_id(identity)
-end
-
-# Support plain integer User IDs for convenience in tests
-defimpl MyApp.CMS.Identity, for: Integer do
-  def user_id(id) do
-    {:ok, id}
-  end
-end
-
-# Support `Accounts.Token` structs
-defimpl MyApp.CMS.Identity, for: MyApp.Accounts.Token do
-  def user_id(token) do
-    with {:ok, %{id: id} <- MyApp.Accounts.authenticate(token) do
-      {:ok, id}
-    end
-  end
-end
-```
-
-This helps DRY up your logic, especially if you have many functions which
-all need to do the same thing.
-
-```elixir
-def create_page(identity, params) do
-  with {:ok, user_id} <- Identity.user_id(identity) do
-    # Decide whether the user_id is allowed to create the page
-  end
-end
-```
-
-It also has the added benefit that it's easy to extend the domain to accept
-other structs, as long as a user_id can be deduced from them.
+**IMPORTANT**: Client apps _may not_ store the ID of the current user in
+any storage system that persists between requests. They must store _only_ the
+token. This allows the logic app to revoke sessions at will by invalidating
+tokens.
 
 ## Authorizing Actions
 
@@ -126,9 +73,8 @@ user actions:
 ```elixir
 import MyApp.CMS.Authorization
 
-def create_page(identity, params) do
-  with {:ok, user_id} <- Identity.user_id(identity),
-       :ok <- authorize(:create_page, user_id) do
+def create_page(user_id, params) do
+  with :ok <- authorize(:create_page, user_id) do
     # create the page
   end
 end
@@ -147,8 +93,6 @@ This approach to authorization has several benefits.
 
 2. **Simplicity**
     - All client apps use the same authentication method: tokens.
-    - Client apps are much simpler. They only have to pass parameters and tokens
-      around rather than concerning themselves with authorization.
 
 3. **Documentation**
     - The permission rules for each domain (and each function) are clearly documented 
@@ -156,27 +100,20 @@ This approach to authorization has several benefits.
 
 4. **Testing**
     - Each permission rule can be tested by simply calling a function. No complex
-      middleware setup required.
+      middleware setup is required.
 
 ## FAQ
 
-### 1. **Why can't client apps pass `user_id`?**
+### 1. **Why can't client apps store `user_id` in the session?**
 
-You might be tempted to store `user_id` in your Phoenix session, and pass this to domain
-functions instead of a token. This reduces the amount of code in your domain modules
-because you don't have to translate tokens into `user_id`s.
+You might be tempted to store `user_id` in your Phoenix session, instead of validating the token
+on each request.
 
-**Why it's bad**: It makes your client Phoenix app control how long a user stays logged in, via the
-time-to-live on the Phoenix session cookie.
+**Why it's bad**: It makes your client app control how long a user stays logged in, via the
+time-to-live on the storage system you're using. This prevents the logic app from being
+able to expire or revoke sessions.
 
-- The logic app can't expire or revoke the session, it must rely on the client
-
-- The logic app is no longer in control of an important business concern: session duration
-
-- The client app is telling the logic who is logged in, which means that the client
-  can impersonate anyone.
-
-### 2. **Why can't we use Plug or Absinthe Middleware for authorization?**
+### 2. **Why not use `Plug` or `Absinthe.Middleware` for permission checking?**
 
 It's tempting to use Plug or Absinthe Middleware to require certain permissions on
 actions, because it seems to DRY up your code.
@@ -201,4 +138,3 @@ the middleware.
 
 In contrast, when you follow the guidelines above, your permission logic will be
 explicit, well documented, decoupled from your client apps, and easily testable.
-

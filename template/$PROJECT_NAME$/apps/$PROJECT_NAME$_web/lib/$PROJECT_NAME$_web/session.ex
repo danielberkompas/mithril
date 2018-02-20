@@ -1,85 +1,75 @@
-<% MixTemplates.ignore_file_unless(assigns[:accounts] != nil && assigns[:html] != nil) %>
+<%= MixTemplates.ignore_file_unless(assigns[:accounts] != nil) %>
 defmodule <%= @project_name_camel_case %>Web.Session do
   @moduledoc """
-  Helper module and plug to support storing `<%= @project_name_camel_case %>.Accounts` tokens in the session.
+  Helpers for manipulating a user's web session.
   """
 
-  import Plug.Conn, only: [
-    assign: 3, 
-    delete_session: 2,
-    get_session: 2,
-    put_session: 3,
-    halt: 1
-  ]
+  import Plug.Conn
 
-  import Phoenix.Controller, only: [
-    put_flash: 3,
-    redirect: 2
-  ]
-
-  alias <%= @project_name_camel_case %>.Accounts
-  alias <%= @project_name_camel_case %>Web.Router.Helpers, as: Routes
+  alias <%= @project_name_camel_case %>.{
+    Accounts,
+    Accounts.User
+  }
 
   @doc """
-  Puts a `<%= @project_name_camel_case %>.Accounts` token into the `conn` session and `conn.assigns`.
+  Signs in a user.
+
+  Stores the current user in `conn.assigns.current_user` and places an
+  `<%= @project_name_camel_case %>.Accounts.Token.token` value in the
+  `session` using `Plug.Conn.put_session/3`.
+
+  ## Examples
+
+  You can sign in an `<%= @project_name_camel_case %>.Accounts.User` struct:
+
+      {:ok, conn} = Session.sign_in(conn, %User{...})
+
+  Or, you can sign in using credentials:
+
+      {:ok, conn} = Session.sign_in(conn, {"valid@email.com", "password"})
   """
-  @spec put_token(Plug.Conn.t(), Accounts.Token.t()) :: Plug.Conn.t
-  def put_token(%Plug.Conn{} = conn, token) do
-    conn
-    |> put_session(:token, token.token)
-    |> assign(:token, token)
-  end
-
-  @doc """
-  Plug function which loads a token from the `conn`'s session and puts 
-  it into the `assigns`.
-  """
-  @spec load_token(Plug.Conn.t, list) :: Plug.Conn.t
-  def load_token(%Plug.Conn{} = conn, _opts) do
-    token = get_session(conn, :token)
-
-    case Accounts.get_token(token) do
-      {:ok, token} ->
-        assign(conn, :token, token)
-
-      _other ->
+  @spec sign_in(Plug.Conn.t, Accounts.user | Accounts.credential) :: 
+    {:ok, Plug.Conn.t} | 
+    Accounts.auth_failure
+  def sign_in(conn, user_or_credential) do
+    with {:ok, token, user} <- create_token(user_or_credential) do
+      conn =
         conn
+        |> assign(:current_user, user)
+        |> put_session(:token, token.token)
+
+      {:ok, conn}
     end
   end
 
+  def signed_in?(conn) do
+    conn.assigns[:current_user] != nil
+  end
+
   @doc """
-  Plug function which requires a token to be present in the session. Use
-  this to protect controller actions which can only be accessed by someone
-  who is logged in.
+  Signs out the current user.
+
+  ## Example
+
+      conn = Session.sign_out(conn)
   """
-  @spec require_token(Plug.Conn.t, list) :: Plug.Conn.t
-  def require_token(%Plug.Conn{} = conn, _opts) do
-    with %{assigns: %{token: token}} <- load_token(conn, []),
-         {:ok, _user} <- Accounts.authenticate(token)
-    do
-      conn
-    else
-      _ ->
-        conn
-        |> delete_token()
-        |> redirect_to_login()
+  @spec sign_out(Plug.Conn.t) :: Plug.Conn.t
+  def sign_out(conn) do
+    conn
+    |> assign(:current_user, nil)
+    |> put_session(:token, nil)
+  end
+
+  defp create_token(%User{} = user) do
+    with {:ok, token} <- Accounts.tokenize(user) do
+      {:ok, token, user}
     end
   end
 
-  @doc """
-  Deletes a `<%= @project_name_camel_case %>.Accounts` token from the `conn` session and assigns.
-  """
-  @spec delete_token(Plug.Conn.t) :: Plug.Conn.t
-  def delete_token(conn) do
-    conn
-    |> delete_session(:token)
-    |> assign(:token, nil)
-  end
-
-  defp redirect_to_login(conn) do
-    conn
-    |> put_flash(:error, "You must log in to access that page.")
-    |> redirect(to: Routes.session_path(conn, :new))
-    |> halt()
+  defp create_token(credential) do
+    with {:ok, token} <- Accounts.tokenize(credential),
+         {:ok, user} <- Accounts.authenticate(token) do
+      {:ok, token, user}
+    end
   end
 end
