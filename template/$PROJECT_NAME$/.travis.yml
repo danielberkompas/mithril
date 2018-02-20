@@ -1,0 +1,15 @@
+<% MixTemplates.ignore_file_unless(assigns[:ci] == "travis") %>
+language: elixir
+
+elixir:
+  - 1.6.1
+
+addons:
+  postgresql: '9.4'
+
+services:
+  - postgresql
+
+script:
+  - bin/setup
+  
