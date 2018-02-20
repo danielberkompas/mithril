@@ -59,9 +59,6 @@ defmodule <%= @project_name_camel_case %>Web.Mixfile do
       {:phoenix_slime, "~> 0.8.0"},
       <% end %>
       {:phoenix_live_reload, "~> 1.0", only: :dev},
-      <%= if assigns[:accounts] do %>
-      {:authenticator, "~> 0.1.0"},
-      <% end %>
       <%= if assigns[:websockets] && assigns[:api] == "graphql" do %>
       {:absinthe_phoenix, "~> 1.4.0"},
       <% end %>

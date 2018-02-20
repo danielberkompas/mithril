@@ -24,14 +24,16 @@ defmodule <%= @project_name_camel_case %>Web.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers, %{"content-security-policy" => @csp}
     <%= if assigns[:accounts] && assigns[:html] do %>
-    plug Authenticator.Session, with: <%= @project_name_camel_case %>Web.Authenticator
+    plug <%= @project_name_camel_case %>Web.Plug.Session,
+      fallback: <%= @project_name_camel_case %>Web.FallbackController
     <% end %>
   end
   <% end %>
   <%= if assigns[:accounts] && assigns[:html] do %>
 
   pipeline :authenticated do
-    plug Authenticator.Authenticated, with: <%= @project_name_camel_case %>Web.Authenticator
+    plug <%= @project_name_camel_case %>Web.Plug.Authenticated,
+      fallback: <%= @project_name_camel_case %>Web.FallbackController
   end
   <% end %>
   <%= if assigns[:api] do %>

@@ -3,7 +3,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.SessionController do
 
   use <%= @project_name_camel_case %>Web, :controller
 
-  alias <%= @project_name_camel_case %>Web.Authenticator
+  alias <%= @project_name_camel_case %>Web.Session
 
   action_fallback <%= @project_name_camel_case %>Web.FallbackController
 
@@ -12,23 +12,23 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.SessionController do
   end
 
   def create(conn, %{"user" => %{"email" => email, "password" => password}}) do
-    conn
-    |> Authenticator.sign_in({email, password})
-    |> redirect()
+    case Session.sign_in(conn, {email, password}) do
+      {:ok, conn} ->
+        conn
+        |> put_flash(:success, Messages.logged_in())
+        |> redirect(to: Routes.page_path(conn, :index))
+      _error ->
+        conn
+        |> put_status(400)
+        |> put_flash(:error, Messages.invalid_email_or_password())
+        |> render("new.html")
+      end
   end
 
   def delete(conn, _params) do
     conn
-    |> Authenticator.sign_out()
+    |> Session.sign_out()
     |> put_flash(:success, Messages.logged_out())
     |> redirect(to: Routes.page_path(conn, :index))
-  end
-
-  defp redirect(%{halted: false} = conn) do
-    redirect(conn, to: Routes.page_path(conn, :index))
-  end
-
-  defp redirect(%{halted: true} = conn) do
-    conn
   end
 end

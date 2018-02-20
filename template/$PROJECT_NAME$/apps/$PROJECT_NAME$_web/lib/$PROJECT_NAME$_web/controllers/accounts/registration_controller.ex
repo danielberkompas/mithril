@@ -4,7 +4,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationController do
   use <%= @project_name_camel_case %>Web, :controller
 
   alias <%= @project_name_camel_case %>.Accounts
-  alias <%= @project_name_camel_case %>Web.Authenticator
+  alias <%= @project_name_camel_case %>Web.Session
 
   plug :scrub_params, "user" when action in [:create, :update]
 
@@ -17,9 +17,9 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationController do
   end
 
   def create(conn, %{"user" => params}) do
-    with {:ok, user} <- Accounts.create_user(params) do
+    with {:ok, user} <- Accounts.create_user(params),
+         {:ok, conn} <- Session.sign_in(conn, user) do
       conn
-      |> Authenticator.sign_in(user)
       |> put_flash(:success, Messages.user_created())
       |> redirect(to: Routes.page_path(conn, :index))
     else
