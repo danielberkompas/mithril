@@ -51,6 +51,9 @@ defmodule Mithril do
       # Takes "slim", "eex"
       html: [takes: "slim or eex"],
 
+      # String, what library to use for in-browser integration testing
+      integration: [takes: "hound"],
+
       # If --assets, which Sass syntax to use:
       #
       # Example: --sass-syntax scss

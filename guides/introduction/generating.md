@@ -49,6 +49,10 @@ application. Use the options below to add functionality.
   * `eex`
   * `slim` via [Slime](http://slime-lang.com/)
 
+* `--integration [library]`: Generates in-browser integration test supporting files and a sample test.
+
+  * [`hound`](https://hex.pm/packages/hound)
+
 * `--sass-syntax [syntax]`: The variant of [Sass](http://sass-lang.com) syntax to use if you have an asset pipeline. Supported options:
 
   * `sass`

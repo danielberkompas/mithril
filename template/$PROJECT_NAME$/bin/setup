@@ -14,6 +14,15 @@ command -v elixir >/dev/null 2>&1 || {
   exit 1
 }
 
+<%= if assigns[:integration] == "hound" do %>
+# Ensure Chromedriver is installed
+command -v chromedriver >/dev/null 2>&1 || {
+  echo "This app requires Chrome Driver for integration testing."
+  echo "Install it using the instructions at https://sites.google.com/a/chromium.org/chromedriver/downloads"
+  exit 1
+}
+<% end %>
+
 <%= if assigns[:assets] do %>
 # Ensure Node.js is installed
 command -v npm >/dev/null 2>&1 || {
