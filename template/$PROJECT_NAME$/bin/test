@@ -3,10 +3,16 @@
 # Test Script
 #
 # Runs all commands needed to fully test the application.
+<%= if assigns[:integration] == "hound" do %>
+# Automatically start Chrome Driver in the background
+chromedriver &
+
+# Automatically kill Chrome Driver after script exits
+trap 'jobs -p | xargs kill' EXIT
+<% end %>
 <%= if Version.match?(System.version(), "~> 1.6") do %>
 MIX_ENV=test mix format --check-formatted || { echo 'Some files were not formatted!'; exit 1; }
 <% end %>
 MIX_ENV=test mix compile --warnings-as-errors --force || { echo 'Please fix all compiler warnings.'; exit 1; }
 MIX_ENV=test mix docs || { echo 'Elixir HTML docs were not generated!'; exit 1; }
 mix test || { echo 'Elixir tests failed!'; exit 1; }
-

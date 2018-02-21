@@ -31,6 +31,7 @@ any of the libraries listed below.
 | [Absinthe](https://absinthe-graphql.org)                         | Yes      | GraphQL APIs (for mobile apps) |
 | [Phoenix](https://phoenixframework.org)                          | Yes      | HTTP/Websocket support         |
 | [Webpack](https://webpack.js.org/) / [Brunch](http://brunch.io/) | Yes      | Front-end assets (JS/CSS)      |
+| [Hound](https://hex.pm/packages/hound)                           | Yes      | In-browser integration tests   |
 
 ## Install
 
