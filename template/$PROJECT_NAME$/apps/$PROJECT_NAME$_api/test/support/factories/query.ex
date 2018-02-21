@@ -5,7 +5,7 @@ defmodule <%= @project_name_camel_case %>API.Factories.Query do
 
   @queries %{
     current_user: """
-     query {
+    query {
       current_user {
         email
       }

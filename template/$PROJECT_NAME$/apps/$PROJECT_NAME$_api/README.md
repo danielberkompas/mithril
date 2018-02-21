@@ -1,10 +1,20 @@
 # <%= @project_name_camel_case %>API
 
-A GraphQL API for <%= @project_name_camel_case %>, based on [Absinthe](http://absinthe-graphql.org).
+A [GraphQL](http://graphql.org/) API for <%= @project_name_camel_case %>,
+built with [Absinthe](http://absinthe-graphql.org).
 
-`<%= @project_name_camel_case %>Web.Router` mounts the API schema for HTTP clients.
+`<%= @project_name_camel_case %>Web.Router` mounts this GraphQL schema at
+`/api` for HTTP requests. You can also query the graph directly:
 
-## Rules
-
-- <%= @project_name_camel_case %>API is a _client_ of <%= @project_name_camel_case %>. Only call <%= @project_name_camel_case %>'s public interface.
-- Do not use `absinthe_ecto`. Instead, load associations using `<%= @project_name_camel_case %>API.Schema.Assoc.assoc/2`.
+```elixir
+<%= @project_name_camel_case %>API.run("""
+query {
+  currentUser {
+    email
+  }
+}
+""", 
+variables: %{}, 
+context: %{})
+# => {:ok, %{data: %{"createUser" => "..."}}}
+```
