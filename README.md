@@ -26,7 +26,7 @@ However, the project generator can generate projects with support for
 any of the libraries listed below.
 
 | Name                                                             | Optional | Purpose                        |
-| ---------------------------------------------------------------- | -------- | ------------------------------ |
+|------------------------------------------------------------------|----------|--------------------------------|
 | [Authority](https://github.com/infinitered/authority)            | Yes      | Authentication library         |
 | [Absinthe](https://absinthe-graphql.org)                         | Yes      | GraphQL APIs (for mobile apps) |
 | [Phoenix](https://phoenixframework.org)                          | Yes      | HTTP/Websocket support         |
@@ -50,10 +50,3 @@ $ mix gen mithril my_app [options]
 ```
 
 See [the documentation](https://hexdocs.pm/mithril) for details on available options.
-
-## Premium Support
-
-[Infinite Red](https://infinite.red) offers premium support for this library and general web &
-mobile app design/development services. Get in touch [here](https://infinite.red/contact) or email us at [hello@infinite.red](mailto:hello@infinite.red).
-
-![Infinite Red Logo](https://infinite.red/images/infinite_red_logo_colored.png)

@@ -1,40 +1,40 @@
 # Change Log
 
-## [Unreleased](https://github.com/infinitered/mithril/tree/HEAD)
+## [Unreleased](https://github.com/danielberkompas/mithril/tree/HEAD)
 
 **Implemented enhancements:**
 
-- Honeybadger Support [\#4](https://github.com/infinitered/mithril/issues/4)
-- Add `-error-reporting \<service\>` option. [\#11](https://github.com/infinitered/mithril/pull/11) ([silasjmatson](https://github.com/silasjmatson))
+- Honeybadger Support [\#4](https://github.com/danielberkompas/mithril/issues/4)
+- Add `-error-reporting \<service\>` option. [\#11](https://github.com/danielberkompas/mithril/pull/11) ([silasjmatson](https://github.com/silasjmatson))
 
 **Fixed bugs:**
 
-- Phoenix.Controller.status\_from\_template/1 is not yet released [\#10](https://github.com/infinitered/mithril/issues/10)
+- Phoenix.Controller.status\_from\_template/1 is not yet released [\#10](https://github.com/danielberkompas/mithril/issues/10)
 
 **Closed issues:**
 
-- More error handling conventions [\#21](https://github.com/infinitered/mithril/issues/21)
-- Generate a secure Content Security Policy [\#20](https://github.com/infinitered/mithril/issues/20)
-- Move documentation to ExDoc [\#16](https://github.com/infinitered/mithril/issues/16)
-- More robust `Accounts` domain [\#13](https://github.com/infinitered/mithril/issues/13)
-- Implement `--deploy` for Heroku [\#6](https://github.com/infinitered/mithril/issues/6)
-- Auth error when installing template [\#1](https://github.com/infinitered/mithril/issues/1)
+- More error handling conventions [\#21](https://github.com/danielberkompas/mithril/issues/21)
+- Generate a secure Content Security Policy [\#20](https://github.com/danielberkompas/mithril/issues/20)
+- Move documentation to ExDoc [\#16](https://github.com/danielberkompas/mithril/issues/16)
+- More robust `Accounts` domain [\#13](https://github.com/danielberkompas/mithril/issues/13)
+- Implement `--deploy` for Heroku [\#6](https://github.com/danielberkompas/mithril/issues/6)
+- Auth error when installing template [\#1](https://github.com/danielberkompas/mithril/issues/1)
 
 **Merged pull requests:**
 
-- Upgrade Authority [\#25](https://github.com/infinitered/mithril/pull/25) ([danielberkompas](https://github.com/danielberkompas))
-- Password length validation & Error Interpolation [\#24](https://github.com/infinitered/mithril/pull/24) ([silasjmatson](https://github.com/silasjmatson))
-- \[\#20\] Generate Content Security Policy [\#23](https://github.com/infinitered/mithril/pull/23) ([danielberkompas](https://github.com/danielberkompas))
-- Add messages module for error handling [\#22](https://github.com/infinitered/mithril/pull/22) ([danielberkompas](https://github.com/danielberkompas))
-- Update bin/test, bin/update [\#19](https://github.com/infinitered/mithril/pull/19) ([danielberkompas](https://github.com/danielberkompas))
-- Rename 'ErrorReporting' domain to 'Errors' [\#18](https://github.com/infinitered/mithril/pull/18) ([danielberkompas](https://github.com/danielberkompas))
-- \[\#16\] Move guides to ExDoc [\#17](https://github.com/infinitered/mithril/pull/17) ([danielberkompas](https://github.com/danielberkompas))
-- Use Authority for Accounts Domain [\#15](https://github.com/infinitered/mithril/pull/15) ([danielberkompas](https://github.com/danielberkompas))
-- \[\#6\] Implement '--deploy heroku' [\#9](https://github.com/infinitered/mithril/pull/9) ([danielberkompas](https://github.com/danielberkompas))
-- Replace PubSub with the callback pattern [\#8](https://github.com/infinitered/mithril/pull/8) ([danielberkompas](https://github.com/danielberkompas))
-- Add Mithril.PubSub to logic, web apps [\#5](https://github.com/infinitered/mithril/pull/5) ([danielberkompas](https://github.com/danielberkompas))
-- Fix postgres config issue when running setup [\#3](https://github.com/infinitered/mithril/pull/3) ([ryanlntn](https://github.com/ryanlntn))
-- Support Semaphore CI [\#2](https://github.com/infinitered/mithril/pull/2) ([danielberkompas](https://github.com/danielberkompas))
+- Upgrade Authority [\#25](https://github.com/danielberkompas/mithril/pull/25) ([danielberkompas](https://github.com/danielberkompas))
+- Password length validation & Error Interpolation [\#24](https://github.com/danielberkompas/mithril/pull/24) ([silasjmatson](https://github.com/silasjmatson))
+- \[\#20\] Generate Content Security Policy [\#23](https://github.com/danielberkompas/mithril/pull/23) ([danielberkompas](https://github.com/danielberkompas))
+- Add messages module for error handling [\#22](https://github.com/danielberkompas/mithril/pull/22) ([danielberkompas](https://github.com/danielberkompas))
+- Update bin/test, bin/update [\#19](https://github.com/danielberkompas/mithril/pull/19) ([danielberkompas](https://github.com/danielberkompas))
+- Rename 'ErrorReporting' domain to 'Errors' [\#18](https://github.com/danielberkompas/mithril/pull/18) ([danielberkompas](https://github.com/danielberkompas))
+- \[\#16\] Move guides to ExDoc [\#17](https://github.com/danielberkompas/mithril/pull/17) ([danielberkompas](https://github.com/danielberkompas))
+- Use Authority for Accounts Domain [\#15](https://github.com/danielberkompas/mithril/pull/15) ([danielberkompas](https://github.com/danielberkompas))
+- \[\#6\] Implement '--deploy heroku' [\#9](https://github.com/danielberkompas/mithril/pull/9) ([danielberkompas](https://github.com/danielberkompas))
+- Replace PubSub with the callback pattern [\#8](https://github.com/danielberkompas/mithril/pull/8) ([danielberkompas](https://github.com/danielberkompas))
+- Add Mithril.PubSub to logic, web apps [\#5](https://github.com/danielberkompas/mithril/pull/5) ([danielberkompas](https://github.com/danielberkompas))
+- Fix postgres config issue when running setup [\#3](https://github.com/danielberkompas/mithril/pull/3) ([ryanlntn](https://github.com/ryanlntn))
+- Support Semaphore CI [\#2](https://github.com/danielberkompas/mithril/pull/2) ([danielberkompas](https://github.com/danielberkompas))
 
 
 
