@@ -44,6 +44,6 @@ defmodule <%= @project_name_camel_case %>.Accounts.Token do
   end
 
   defp put_last_used_at(changeset) do
-    put_change(changeset, :last_used_at, DateTime.utc_now())
+    put_change(changeset, :last_used_at, DateTime.truncate(DateTime.utc_now(), :second))
   end
 end

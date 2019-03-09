@@ -25,7 +25,7 @@ defmodule <%= @project_name_camel_case %>Web.Plug.Session do
   def call(conn, opts) do
     fallback = Keyword.fetch!(opts, :fallback)
 
-    with {:ok, token} <- get_session(conn, :token),
+    with token <- get_session(conn, :token),
          {:ok, conn} <- Session.sign_in(conn, %Token{token: token}) do
       conn
     else

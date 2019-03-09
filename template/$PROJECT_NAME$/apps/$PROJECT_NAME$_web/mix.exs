@@ -47,16 +47,17 @@ defmodule <%= @project_name_camel_case %>Web.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, ">= 1.3.0"},
+      {:phoenix, ">= 1.4.0"},
       {:phoenix_pubsub, "~> 1.0"},
       <%= if assigns[:ecto] do %>
-      {:phoenix_ecto, "~> 3.2"},
+      {:ecto_sql, "~> 3.0"},
+      {:phoenix_ecto, "~> 4.0"},
       <% end %>
       <%= if assigns[:html] do %>
       {:phoenix_html, "~> 2.10"},
       <% end %>
       <%= if assigns[:html] == "slim" do %>
-      {:phoenix_slime, "~> 0.8.0"},
+      {:phoenix_slime, "~> 0.12.0"},
       <% end %>
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       <%= if assigns[:websockets] && assigns[:api] == "graphql" do %>
@@ -72,9 +73,11 @@ defmodule <%= @project_name_camel_case %>Web.Mixfile do
       <%= if assigns[:integration] == "hound" do %>
       {:hound, "~> 1.0", only: :test},
       <% end %>
-      {:cowboy, "~> 1.0"},
+      {:plug_cowboy, "~> 2.0"},
+      {:plug, "~> 1.7"},
+      {:jason, "~> 1.0"},
       <%= if assigns[:email] do %>
-      {:swoosh, "~> 0.11.0"} # For mailbox preview plug
+      {:swoosh, "~> 0.21.0"} # For mailbox preview plug
       <% end %>
     ]
   end

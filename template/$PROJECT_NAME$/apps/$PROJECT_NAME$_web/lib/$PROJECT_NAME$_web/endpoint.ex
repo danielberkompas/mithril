@@ -10,7 +10,7 @@ defmodule <%= @project_name_camel_case %>Web.Endpoint do
 
 
   <%= if assigns[:websockets] do %>
-  socket "/socket", <%= @project_name_camel_case %>Web.UserSocket
+  socket("/socket", <%= @project_name_camel_case %>Web.UserSocket, websocket: true)
   <% end %>
 
   # Serve at "/" the static files from "priv/static" directory.
@@ -37,7 +37,7 @@ defmodule <%= @project_name_camel_case %>Web.Endpoint do
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
-    json_decoder: Poison
+    json_decoder: Phoenix.json_library()
 
   plug Plug.MethodOverride
   plug Plug.Head

@@ -1,4 +1,5 @@
 # Mithril
+
 [![Build Status](https://semaphoreci.com/api/v1/projects/39401688-bc0e-4d65-85b0-075dd293d2c7/1625736/badge.svg)](https://semaphoreci.com/ir/mithril)
 
 > An Elixir architecture-in-a-box for a backend server. Supports GraphQL, Authority authentication, and more.
@@ -26,7 +27,7 @@ However, the project generator can generate projects with support for
 any of the libraries listed below.
 
 | Name                                                             | Optional | Purpose                        |
-|------------------------------------------------------------------|----------|--------------------------------|
+| ---------------------------------------------------------------- | -------- | ------------------------------ |
 | [Authority](https://github.com/infinitered/authority)            | Yes      | Authentication library         |
 | [Absinthe](https://absinthe-graphql.org)                         | Yes      | GraphQL APIs (for mobile apps) |
 | [Phoenix](https://phoenixframework.org)                          | Yes      | HTTP/Websocket support         |

@@ -1,0 +1,25 @@
+version: v1.0
+name: Mithril
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+blocks:
+  - name: Tests
+    task:
+      env_vars:
+        - name: DATABASE_POSTGRESQL_USERNAME
+          value: postgres
+        - name: DATABASE_POSTGRESQL_PASSWORD
+          value: postgres
+      prologue:
+        commands:
+          - kiex install 1.7.3
+          - sem-version elixir 1.7.3
+          - sem-service start postgres
+      jobs:
+        - name: Tests
+          commands:
+            - checkout
+            - bin/test

@@ -25,7 +25,7 @@ defmodule <%= @project_name_camel_case %>API.Context do
 
   @impl true
   def call(conn, _opts) do
-    context = 
+    context =
       conn
       |> parse_token()
       |> current_user()
@@ -38,7 +38,7 @@ defmodule <%= @project_name_camel_case %>API.Context do
       ["Bearer " <> token] ->
         %{token: %Token{token: token}}
       _ ->
-        %{}
+        %{token: "invalid"}
     end
   end
 

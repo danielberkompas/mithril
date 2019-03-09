@@ -5,6 +5,9 @@
 # is restricted to this project.
 use Mix.Config
 
+# Use Jason for JSON parsing in Phoenix
+config :phoenix, :json_library, Jason
+
 # General application configuration
 config :<%= @project_name %>_web,
 <%= if assigns[:ecto] do %>

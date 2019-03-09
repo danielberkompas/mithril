@@ -50,12 +50,12 @@ defmodule <%= @project_name_camel_case %>.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [<%= if assigns[:ecto] == "postgres" do %>
-      {:postgrex, ">= 0.0.0"}<% end %><%= if assigns[:ecto] do %>,
-      {:ecto, "~> 2.2"}<% end %><%= if assigns[:email] do %>,
-      {:swoosh, "~> 0.11.0"}<% end %><%= if assigns[:accounts] do %>,
+      {:postgrex, ">= 0.14.0"}<% end %><%= if assigns[:ecto] do %>,
+      {:ecto_sql, "~> 3.0"}<% end %><%= if assigns[:email] do %>,
+      {:swoosh, "~> 0.21.0"}<% end %><%= if assigns[:accounts] do %>,
       {:authority, "~> 0.3.0"},
       {:authority_ecto, "~> 0.1.1"},
-      {:exnumerator, ">= 0.0.0"},
+      {:exnumerator, ">= 1.7.3"},
       {:comeonin, "~> 4.0.0"},
       {:bcrypt_elixir, "~> 0.12"},
     <% end %>

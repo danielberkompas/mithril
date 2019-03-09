@@ -2,6 +2,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationControllerTest
   use <%= @project_name_camel_case %>Web.ConnCase
 
   import <%= @project_name_camel_case %>.AccountsFactory
+  import Plug.Test
 
   alias <%= @project_name_camel_case %>.Accounts
 
@@ -65,10 +66,11 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationControllerTest
       end
     end
 
-    test "displays a form to edit the current user", %{conn: conn, user: user} do
+    test "displays a form to edit the current user", %{conn: conn, user: user, token: token} do
       response =
         conn
         |> assign(:current_user, user)
+        |> init_test_session(token: token.token)
         |> get(Routes.registration_path(conn, :edit))
         |> html_response(200)
 
@@ -90,7 +92,7 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationControllerTest
       end
     end
 
-    test "updates a user's fields", %{conn: conn, user: user} do
+    test "updates a user's fields", %{conn: conn, user: user, token: token} do
       params = %{
         "user" => %{
           "email" => "new@email.com",
@@ -99,9 +101,10 @@ defmodule <%= @project_name_camel_case %>Web.Accounts.RegistrationControllerTest
         }
       }
 
-      conn = 
+      conn =
         conn
         |> assign(:current_user, user)
+        |> init_test_session(token: token.token)
         |> put(Routes.registration_path(conn, :update), params)
 
       assert get_flash(conn, :success)
